@@ -31,7 +31,7 @@ export default function EditBlogPostPage() {
       <main className="flex-1 flex flex-col items-center justify-center">
         <div className="w-full max-w-2xl bg-white rounded-xl shadow-xl p-8 mt-8">
           <h1 className="text-2xl font-bold mb-6">Edit Blog Post</h1>
-          <BlogPostForm initial={post} isEdit={true} onSave={async () => router.push('/admin/blog')} onClose={() => router.push('/admin/blog')} />
+          <BlogPostForm initial={post} onSave={async () => router.push('/admin/blog')} onClose={() => router.push('/admin/blog')} />
         </div>
       </main>
     </div>

@@ -13,7 +13,7 @@ export type BlogPost = {
   excerpt?: string;
   content?: string;
   image?: string;
-  category?: string;
+  category?: string | { name: string };
   date?: string;
   readTime?: string;
   author: {

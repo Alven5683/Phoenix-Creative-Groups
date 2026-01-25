@@ -9,6 +9,6 @@ export async function POST(request: Request) {
   }
 
   const token = signAdminJwt();
-  setAdminCookie(token);
+  await setAdminCookie(token);
   return NextResponse.json({ success: true });
 }

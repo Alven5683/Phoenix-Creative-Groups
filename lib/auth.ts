@@ -22,7 +22,10 @@ export function verifyAdminJwt(token: string) {
 	}
 }
 
-export function setAdminCookie(token: string) {
+// This function must be called inside a Next.js Server Action or Route Handler where cookies().set is available
+export async function setAdminCookie(token: string) {
+	'use server';
+	// @ts-expect-error: cookies().set is only available in server actions/route handlers
 	cookies().set(COOKIE_NAME, token, {
 		httpOnly: true,
 		secure: process.env.NODE_ENV === 'production',
@@ -32,10 +35,16 @@ export function setAdminCookie(token: string) {
 	});
 }
 
-export function getAdminToken() {
-	return cookies().get(COOKIE_NAME)?.value;
+
+export async function getAdminToken() {
+	const cookieStore = await cookies();
+	const token = cookieStore.get(COOKIE_NAME);
+	return token?.value;
 }
 
-export function clearAdminCookie() {
+// This function must be called inside a Next.js Server Action or Route Handler where cookies().set is available
+export async function clearAdminCookie() {
+	'use server';
+	// @ts-expect-error: cookies().set is only available in server actions/route handlers
 	cookies().set(COOKIE_NAME, '', { maxAge: 0, path: '/admin' });
 }

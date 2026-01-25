@@ -2,7 +2,9 @@ import { NextResponse } from 'next/server';
 import { dbConnect } from '@/lib/db';
 import Service from '@/models/Service';
 
-export async function GET(request, context) {
+import { NextRequest } from 'next/server';
+
+export async function GET(request: NextRequest, context: { params: Promise<{ slug: string }> }) {
   await dbConnect();
   const params = await context.params;
   const slug = params.slug;
@@ -13,9 +15,9 @@ export async function GET(request, context) {
   return NextResponse.json(service);
 }
 
-export async function PUT(request, context) {
+export async function PUT(request: NextRequest, context: { params: Promise<{ slug: string }> }) {
   await dbConnect();
-  const params = context.params;
+  const params = await context.params;
   const slug = params.slug;
   const body = await request.json();
 

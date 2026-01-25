@@ -2,7 +2,9 @@ import { NextResponse } from 'next/server';
 import { dbConnect } from '@/lib/db';
 import Portfolio from '@/models/Portfolio';
 
-export async function GET(request, { params }) {
+import { NextRequest } from 'next/server';
+
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   await dbConnect();
   const { id } = await params;
   const project = await Portfolio.findById(id);
@@ -12,7 +14,7 @@ export async function GET(request, { params }) {
   return NextResponse.json(project);
 }
 
-export async function PUT(request, { params }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   await dbConnect();
   const { id } = await params;
   const data = await request.json();
@@ -27,7 +29,7 @@ export async function PUT(request, { params }) {
   }
 }
 
-export async function DELETE(request, { params }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   await dbConnect();
   const { id } = await params;
   try {
