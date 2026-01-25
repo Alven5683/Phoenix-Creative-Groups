@@ -39,26 +39,34 @@ export default function PortfolioPage() {
       transition={{ duration: 0.5, ease: 'easeOut' }}
       className="max-w-5xl mx-auto py-16 px-4"
     >
-      <h1 className="text-3xl font-bold mb-8">Our Portfolio</h1>
+      <h1 className="text-4xl font-display font-bold mb-8 text-accent-violet drop-shadow-lg">Our Portfolio</h1>
       {loading ? (
         <div>Loading...</div>
       ) : projects.length === 0 ? (
         <div>No projects found.</div>
       ) : (
-        <div className="grid md:grid-cols-2 gap-8">
+        <motion.div
+          className="grid xs:grid-cols-1 md:grid-cols-2 gap-8"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+        >
           {projects.map((project) => (
             <GlassCard key={project._id} className="p-6">
-              <h2 className="text-xl font-bold mb-2">{project.title}</h2>
-              <p className="mb-4">{project.description}</p>
+              <h2 className="text-2xl font-display font-bold mb-2 text-accent-cyan drop-shadow">
+                {project.title}
+              </h2>
+              <p className="mb-4 text-lg text-gray-100/90">{project.description}</p>
               {project.image && (
-                <img src={project.image} alt={project.title} className="mb-4 rounded-lg w-full h-40 object-cover border border-glassBorder" />
+                <img src={project.image} alt={project.title} className="mb-4 rounded-lg w-full h-40 object-cover border border-glassBorder shadow-glass" />
               )}
               {project.projectUrl && (
-                <a href={project.projectUrl} target="_blank" rel="noopener noreferrer" className="text-indigo-500 underline">View Project</a>
+                <a href={project.projectUrl} target="_blank" rel="noopener noreferrer" className="text-accent-neon underline font-semibold">View Project</a>
               )}
             </GlassCard>
           ))}
-        </div>
+        </motion.div>
       )}
     </motion.div>
   );

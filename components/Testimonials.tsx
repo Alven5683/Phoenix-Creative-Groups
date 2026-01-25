@@ -32,14 +32,14 @@ const Testimonials: React.FC = () => {
   }, []);
 
   return (
-    <section id="testimonials" className="py-20 bg-gray-50" aria-label="Testimonials">
+    <section id="testimonials" className="py-20 bg-gray-50 w-full" aria-label="Testimonials" style={{width:'100vw', marginLeft:'calc(50% - 50vw)'}}>
       <button className="bg-white shadow-md rounded-full px-4 py-1 text-sm font-semibold flex items-center mx-auto mb-4 focus:outline-none focus:ring-2 focus:ring-glassBorder" tabIndex={0} aria-label="Testimonials">
         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h11M9 21V3m13 18V7a2 2 0 00-2-2h-6" />
         </svg>
         Testimonials
       </button>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full px-2 xs:px-4 md:px-8 lg:px-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -50,7 +50,7 @@ const Testimonials: React.FC = () => {
           <h2 className="text-4xl md:text-5xl font-bold text-black mb-6">
             What Our Clients Say
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 w-full max-w-full">
             Don't just take our word for it. Here's what industry leaders are saying about ORBAI.
           </p>
         </motion.div>

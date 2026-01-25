@@ -1,17 +1,20 @@
+
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Orbitron, Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const orbitron = Orbitron({
+  variable: "--font-display",
   subsets: ["latin"],
+  weight: ["400", "700"],
+  display: "swap",
 });
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
+  variable: "--font-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -25,11 +28,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white dark:bg-black`}>
+    <html lang="en" className="dark">
+      <body
+        className={`min-h-screen min-w-full w-full antialiased bg-background bg-hero-gradient text-white ${orbitron.variable} ${inter.variable} font-sans`}
+        style={{ WebkitFontSmoothing: "antialiased" }}
+      >
         <Navbar />
-        <main className="min-h-[80vh] flex flex-col">
-          <div className="w-full mx-auto px-2 md:px-6 flex-1 flex flex-col">
+        <main className="min-h-[80vh] flex flex-col w-full">
+          <div
+            className="w-full flex-1 flex flex-col px-2 xs:px-4 md:px-8 lg:px-16"
+          >
             {children}
           </div>
         </main>

@@ -1,15 +1,24 @@
 "use client";
+
 import { motion } from 'framer-motion';
 import { Zap, ArrowRight } from 'lucide-react';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, TorusKnot, Environment } from '@react-three/drei';
 
 const Hero = () => {
   return (
     <div className="relative min-h-screen bg-linear-to-br from-gray-50 to-white overflow-hidden">
-      {/* Ripple Animation Background */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-linear-to-r from-blue-100 to-purple-100 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
-        <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-linear-to-r from-purple-100 to-pink-100 rounded-full mix-blend-multiply filter blur-xl animate-pulse delay-1000"></div>
-        <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-linear-to-r from-pink-100 to-blue-100 rounded-full mix-blend-multiply filter blur-xl animate-pulse delay-2000"></div>
+      {/* 3D Animated Background */}
+      <div className="absolute inset-0 w-full h-full z-0">
+        <Canvas camera={{ position: [0, 0, 8], fov: 50 }} style={{ width: '100%', height: '100%' }}>
+          <ambientLight intensity={0.7} />
+          <directionalLight position={[5, 5, 5]} intensity={0.7} />
+          <TorusKnot args={[1.7, 0.5, 128, 32]} position={[0, 0, 0]}>
+            <meshStandardMaterial color="#a259ff" metalness={0.7} roughness={0.2} />
+          </TorusKnot>
+          <Environment preset="sunset" />
+          <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={1.5} />
+        </Canvas>
       </div>
 
       <div className="relative z-10 flex items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8">

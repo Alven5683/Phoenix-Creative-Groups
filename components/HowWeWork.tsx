@@ -4,7 +4,8 @@ import { motion } from 'framer-motion';
 
 const HowWeWork = () => (
   <motion.section
-    className="max-w-5xl mx-auto py-16 px-4 text-center"
+    className="w-full py-16 px-2 xs:px-4 md:px-8 lg:px-16 text-center bg-white"
+    style={{width:'100vw', marginLeft:'calc(50% - 50vw)'}}
     initial={{ opacity: 0, y: 30 }}
     whileInView={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.8 }}
