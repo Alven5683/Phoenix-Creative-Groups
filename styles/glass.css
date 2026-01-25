@@ -1,0 +1,27 @@
+.glass-card {
+	background: var(--glass-bg, rgba(255,255,255,0.08));
+	border-radius: 1.5rem;
+	box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+	backdrop-filter: blur(14px);
+	-webkit-backdrop-filter: blur(14px);
+	border: 1.5px solid var(--glass-border, rgba(255,255,255,0.18));
+	border-image: linear-gradient(135deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.08) 100%) 1;
+	background-image: linear-gradient(135deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 100%);
+	transition: box-shadow 0.2s, border 0.2s, background 0.2s;
+}
+
+.glass-card:hover {
+	box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.22);
+	border-color: rgba(255,255,255,0.28);
+}
+
+.glass-bg-dark {
+	background: rgba(16,16,20,0.92);
+	backdrop-filter: blur(14px);
+	-webkit-backdrop-filter: blur(14px);
+}
+
+.gradient-border {
+	border: 1.5px solid;
+	border-image: linear-gradient(135deg, #fff 0%, #aaa 100%) 1;
+}

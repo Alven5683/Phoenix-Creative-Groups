@@ -1,0 +1,18 @@
+import { NextResponse } from 'next/server';
+import mongoose from 'mongoose';
+import { dbConnect } from '@/lib/db';
+
+const Testimonial = mongoose.models.Testimonial || mongoose.model('Testimonial');
+
+export async function POST(req: Request) {
+  const { id, status } = await req.json();
+  if (!id || !['approved', 'rejected'].includes(status)) {
+    return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
+  }
+  await dbConnect();
+  const update: any = { approved: false, rejected: false };
+  if (status === 'approved') update.approved = true;
+  if (status === 'rejected') update.rejected = true;
+  const result = await Testimonial.findByIdAndUpdate(id, update, { new: true });
+  return NextResponse.json(result);
+}

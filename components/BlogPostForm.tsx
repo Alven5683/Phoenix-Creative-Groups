@@ -1,49 +1,104 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CloudinaryUpload from "./CloudinaryUpload";
 import { Editor } from "@tinymce/tinymce-react";
 
-type BlogPost = {
+export type BlogPost = {
+  _id?: string;
   title: string;
   slug: string;
   excerpt?: string;
   content?: string;
   image?: string;
-  category?: string;
+  category?: string; // will hold ObjectId string
   date?: string;
   readTime?: string;
-  author?: { name?: string; role?: string; avatar?: string };
+  author?: string; // will hold ObjectId string
   seoTitle?: string;
   seoDescription?: string;
-  seoImage?: string;
 };
+
+interface Author {
+  _id: string;
+  name: string;
+  role?: string;
+  avatar?: string;
+}
 
 interface BlogPostFormProps {
   initial?: BlogPost;
   onSave: (data: BlogPost) => Promise<void>;
   onClose: () => void;
   autoSlug?: boolean;
-  categories?: string[];
-  authors?: string[];
+  categories?: { _id: string; name: string }[];
+  authors?: Author[];
 }
 
-export default function BlogPostForm({ initial, onSave, onClose, autoSlug, categories = ["Tech", "Design", "Business", "Marketing"], authors = ["John Doe", "Jane Smith", "Akshay Patel"] }: BlogPostFormProps) {
+export default function BlogPostForm({ initial, onSave, onClose, autoSlug, categories = [], authors = [] }: BlogPostFormProps) {
   const [title, setTitle] = useState(initial?.title || "");
   const [slug, setSlug] = useState(initial?.slug || "");
-  const [slugEdited, setSlugEdited] = useState(false);
   const [excerpt, setExcerpt] = useState(initial?.excerpt || "");
   const [content, setContent] = useState(initial?.content || "");
   const [image, setImage] = useState(initial?.image || "");
-  const [category, setCategory] = useState(initial?.category || "");
+  const [category, setCategory] = useState(() => {
+    const cat = initial?.category;
+    if (cat && typeof cat === 'object' && cat !== null && typeof (cat as any)._id === 'string') {
+      return (cat as { _id: string })._id;
+    }
+    if (typeof cat === 'string') {
+      return cat;
+    }
+    return '';
+  });
   const [date, setDate] = useState(initial?.date || "");
   const [readTime, setReadTime] = useState(initial?.readTime || "");
-  const [authorName, setAuthorName] = useState(initial?.author?.name || "");
-  const [authorRole, setAuthorRole] = useState(initial?.author?.role || "");
-  const [authorAvatar, setAuthorAvatar] = useState(initial?.author?.avatar || "");
+  const [author, setAuthor] = useState(() => {
+    const auth = initial?.author;
+    if (auth && typeof auth === 'object' && auth !== null && typeof (auth as any)._id === 'string') {
+      return (auth as { _id: string })._id;
+    }
+    if (typeof auth === 'string') {
+      return auth;
+    }
+    return '';
+  });
+  const [authorRole, setAuthorRole] = useState("");
+  const [authorAvatar, setAuthorAvatar] = useState("");
   const [seoTitle, setSeoTitle] = useState(initial?.seoTitle || "");
   const [seoDescription, setSeoDescription] = useState(initial?.seoDescription || "");
-  const [seoImage, setSeoImage] = useState(initial?.seoImage || "");
   const [saving, setSaving] = useState(false);
+
+  // Set date to today on mount if not already set
+  useEffect(() => {
+    if (!initial?.date) {
+      const today = new Date();
+      const formatted = today.toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' });
+      setDate(formatted);
+    }
+  }, [initial?.date]);
+
+  // Estimate read time from content (average 200 words/minute)
+  useEffect(() => {
+    if (content) {
+      const words = content.replace(/<[^>]+>/g, '').split(/\s+/).filter(Boolean).length;
+      const mins = Math.max(1, Math.round(words / 200));
+      setReadTime(`${mins} min read`);
+    } else {
+      setReadTime("");
+    }
+  }, [content]);
+
+  // When author changes, update role and avatar from authors list
+  useEffect(() => {
+    if (author && authors && authors.length > 0) {
+      const found = authors.find((a: Author) => a._id === author);
+      setAuthorRole(found?.role || "");
+      setAuthorAvatar(found?.avatar || "");
+    } else {
+      setAuthorRole("");
+      setAuthorAvatar("");
+    }
+  }, [author, authors]);
 
   function slugify(str: string) {
     return str
@@ -54,18 +109,11 @@ export default function BlogPostForm({ initial, onSave, onClose, autoSlug, categ
       .replace(/-+/g, "-");
   }
 
-  // Auto-generate slug from title if enabled and slug not manually edited
+  // Always auto-generate slug from title
   function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
     setTitle(value);
-    if (autoSlug && !slugEdited) {
-      setSlug(slugify(value));
-    }
-  }
-
-  function handleSlugChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setSlug(e.target.value);
-    setSlugEdited(true);
+    setSlug(slugify(value));
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -77,30 +125,30 @@ export default function BlogPostForm({ initial, onSave, onClose, autoSlug, categ
       excerpt,
       content,
       image,
-      category,
+      category, // _id string
       date,
       readTime,
-      author: { name: authorName, role: authorRole, avatar: authorAvatar },
+      author, // _id string
       seoTitle,
       seoDescription,
-      seoImage,
     });
     setSaving(false);
   }
 
   return (
-    <form className="grid grid-cols-1 md:grid-cols-2 gap-8" onSubmit={handleSubmit} aria-label="Blog Post Form">
-      {/* Left Side: Other Fields */}
-      <div className="flex flex-col gap-4">
+    <form className="w-full flex flex-row gap-8" onSubmit={handleSubmit} aria-label="Blog Post Form">
+      {/* Left column: 20% */}
+      <div className="w-1/5 min-w-[200px] flex flex-col gap-4">
         <label className="block text-gray-300 mb-1">Category</label>
         <select className="px-4 py-3 rounded-lg bg-dark/80 border border-glassBorder text-white" value={category} onChange={e => setCategory(e.target.value)} required>
           <option value="">Select Category</option>
-          {categories.map((cat) => (
-            <option key={cat} value={cat}>{cat}</option>
+          {Array.isArray(categories) && categories.map((cat) => (
+            <option key={cat._id} value={cat._id}>{cat.name}</option>
           ))}
         </select>
-        <input type="text" placeholder="Date (e.g. May 12, 2025)" className="px-4 py-3 rounded-lg bg-dark/80 border border-glassBorder text-white" value={date} onChange={e => setDate(e.target.value)} />
-        <input type="text" placeholder="Read Time (e.g. 8 min read)" className="px-4 py-3 rounded-lg bg-dark/80 border border-glassBorder text-white" value={readTime} onChange={e => setReadTime(e.target.value)} />
+        {/* Date and Read Time fields are hidden from the form UI, but still included in submission */}
+        {/* <input type="text" placeholder="Date (e.g. May 12, 2025)" className="px-4 py-3 rounded-lg bg-dark/80 border border-glassBorder text-white" value={date} readOnly /> */}
+        {/* <input type="text" placeholder="Read Time (e.g. 8 min read)" className="px-4 py-3 rounded-lg bg-dark/80 border border-glassBorder text-white" value={readTime} readOnly /> */}
         <div>
           <label className="block text-gray-300 mb-1">Image</label>
           {image && <img src={image} alt="Blog Post" className="mb-2 rounded-lg w-32 h-20 object-cover border border-glassBorder" />}
@@ -108,54 +156,94 @@ export default function BlogPostForm({ initial, onSave, onClose, autoSlug, categ
         </div>
         <div>
           <label className="block text-gray-300 mb-1">Author</label>
-          <select className="px-4 py-3 rounded-lg bg-dark/80 border border-glassBorder text-white" value={authorName} onChange={e => setAuthorName(e.target.value)} required>
+          <select className="px-4 py-3 rounded-lg bg-dark/80 border border-glassBorder text-white" value={author} onChange={e => setAuthor(e.target.value)} required>
             <option value="">Select Author</option>
-            {authors.map((author) => (
-              <option key={author} value={author}>{author}</option>
-            ))}
+            {Array.isArray(authors) && authors.map((a) =>
+              typeof a === 'object' && a && '_id' in a ? (
+                <option key={a._id} value={a._id}>{a.name}</option>
+              ) : null
+            )}
           </select>
           <label className="block text-gray-300 mb-1 mt-2">Author Role</label>
-          <input type="text" placeholder="Author Role" className="px-4 py-3 rounded-lg bg-dark/80 border border-glassBorder text-white" value={authorRole} onChange={e => setAuthorRole(e.target.value)} />
+          <input type="text" placeholder="Author Role" className="px-4 py-3 rounded-lg bg-dark/80 border border-glassBorder text-white" value={authorRole} readOnly />
           <label className="block text-gray-300 mb-1 mt-2">Author Avatar URL</label>
-          <input type="text" placeholder="Author Avatar URL" className="px-4 py-3 rounded-lg bg-dark/80 border border-glassBorder text-white" value={authorAvatar} onChange={e => setAuthorAvatar(e.target.value)} />
+          <input type="text" placeholder="Author Avatar URL" className="px-4 py-3 rounded-lg bg-dark/80 border border-glassBorder text-white" value={authorAvatar} readOnly />
         </div>
         <div>
           <label className="block text-gray-300 mb-1">SEO Title</label>
           <input type="text" placeholder="SEO Title" className="px-4 py-3 rounded-lg bg-dark/80 border border-glassBorder text-white" value={seoTitle} onChange={e => setSeoTitle(e.target.value)} />
           <label className="block text-gray-300 mb-1 mt-2">SEO Description</label>
           <input type="text" placeholder="SEO Description" className="px-4 py-3 rounded-lg bg-dark/80 border border-glassBorder text-white" value={seoDescription} onChange={e => setSeoDescription(e.target.value)} />
-          <label className="block text-gray-300 mb-1 mt-2">SEO Image URL</label>
-          <input type="text" placeholder="SEO Image URL" className="px-4 py-3 rounded-lg bg-dark/80 border border-glassBorder text-white" value={seoImage} onChange={e => setSeoImage(e.target.value)} />
         </div>
       </div>
-      {/* Right Side: Title & Content */}
-      <div className="flex flex-col gap-4">
-        <input type="text" placeholder="Title" className="px-4 py-3 rounded-lg bg-dark/80 border border-glassBorder text-white" value={title} onChange={handleTitleChange} required />
-        <input type="text" placeholder="Slug" className="px-4 py-3 rounded-lg bg-dark/80 border border-glassBorder text-white" value={slug} onChange={handleSlugChange} required />
+      {/* Right column: 80% */}
+      <div className="w-4/5 flex flex-col gap-4">
+        <input
+          type="text"
+          placeholder="Write a compelling title..."
+          className="w-full text-4xl font-bold outline-none border-none mb-6 bg-transparent text-black placeholder:text-gray-400"
+          value={title}
+          onChange={handleTitleChange}
+          required
+        />
+        {/* Slug is auto-generated and hidden from the form UI */}
         <input type="text" placeholder="Excerpt" className="px-4 py-3 rounded-lg bg-dark/80 border border-glassBorder text-white" value={excerpt} onChange={e => setExcerpt(e.target.value)} required />
-        <label className="block text-gray-300 mb-1">Content</label>
+        <label className="block text-black-300 mb-1">Content</label>
+        <div className="mb-2 text-sm text-blue-400 bg-blue-900/30 rounded px-3 py-2">
+          <b>Tip:</b> Use the toolbar to add headings, lists, and formatting. Paste from Google Docs/Word, then re-apply formatting if needed.<br />
+          For headings, use the "Paragraph" dropdown. For lists, use the bullet/numbered list buttons.
+        </div>
         <Editor
           apiKey="8p0dlj1p2ljwpile2bbymmp94wfqij4iakpmfptzz5edbkqb"
           value={content}
           onEditorChange={setContent}
           init={{
-            height: 350,
-            menubar: false,
+            height: '70vh',
+            menubar: 'file edit view insert format tools table help',
             plugins: [
-              "advlist autolink lists link image charmap preview anchor",
-              "searchreplace visualblocks code fullscreen",
-              "insertdatetime media table code help wordcount"
+              'advlist',
+              'autolink',
+              'lists',
+              'link',
+              'image',
+              'media',
+              'table',
+              'code',
+              'fullscreen',
+              'wordcount',
+              'searchreplace',
+              'visualblocks',
+              'paste',
             ],
             toolbar:
-              "undo redo | formatselect | bold italic backcolor | \
-              alignleft aligncenter alignright alignjustify | \
-              bullist numlist outdent indent | removeformat | help",
-            skin: "oxide-dark",
-            content_css: "dark"
+              'undo redo | blocks | bold italic underline | ' +
+              'alignleft aligncenter alignright | bullist numlist | ' +
+              'link image media | removeformat | fullscreen',
+            toolbar_mode: 'sliding',
+            branding: false,
+            statusbar: true,
+            content_style: `\
+              body {\
+                font-family: Inter, system-ui, -apple-system;\
+                font-size: 18px;\
+                line-height: 1.8;\
+                max-width: 760px;\
+                margin: 40px auto;\
+                padding: 0 16px;\
+                color: #000;\
+                background: transparent;\
+              }\
+              h1 { font-size: 2.4em; font-weight: 700; }\
+              h2 { font-size: 1.8em; font-weight: 600; }\
+              h3 { font-size: 1.4em; font-weight: 600; }\
+              p  { margin: 0.8em 0; }\
+            `,
+            block_formats: 'Paragraph=p; Heading 1=h1; Heading 2=h2; Heading 3=h3',
+            placeholder: 'Start writing your story...'
           }}
         />
         <div className="flex gap-4 mt-4">
-          <button type="submit" className="px-6 py-3 rounded-xl bg-gradient-to-r from-pink-500 to-indigo-500 text-white font-semibold shadow-lg hover:scale-105 transition-transform" disabled={saving}>{saving ? "Saving..." : "Save"}</button>
+          <button type="submit" className="px-6 py-3 rounded-xl bg-gradient-to-r from-pink-500 to-indigo-500 text-black font-semibold shadow-lg hover:scale-105 transition-transform" disabled={saving}>{saving ? "Saving..." : "Save"}</button>
           <button type="button" className="px-6 py-3 rounded-xl bg-gray-200 text-black font-semibold shadow-lg hover:scale-105 transition-transform" onClick={onClose}>Cancel</button>
         </div>
       </div>

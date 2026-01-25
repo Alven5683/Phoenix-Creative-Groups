@@ -1,0 +1,38 @@
+import { NextResponse } from 'next/server';
+import { dbConnect } from '@/lib/db';
+import Service from '@/models/Service';
+
+export async function GET(request, context) {
+  await dbConnect();
+  const params = await context.params;
+  const slug = params.slug;
+  const service = await Service.findOne({ slug });
+  if (!service) {
+    return NextResponse.json({ error: 'Service not found' }, { status: 404 });
+  }
+  return NextResponse.json(service);
+}
+
+export async function PUT(request, context) {
+  await dbConnect();
+  const params = context.params;
+  const slug = params.slug;
+  const body = await request.json();
+
+  // Find the service by slug
+  const service = await Service.findOne({ slug });
+  if (!service) {
+    return NextResponse.json({ error: 'Service not found' }, { status: 404 });
+  }
+
+  // Update fields (adjust as needed for your schema)
+  if (body.title !== undefined) service.title = body.title;
+  if (body.description !== undefined) service.description = body.description;
+  if (body.image !== undefined) service.image = body.image;
+  if (body.seoTitle !== undefined) service.seoTitle = body.seoTitle;
+  if (body.seoDescription !== undefined) service.seoDescription = body.seoDescription;
+  // Add more fields as needed
+
+  await service.save();
+  return NextResponse.json(service);
+}
