@@ -80,7 +80,7 @@ export default function BlogPostList({ onEdit, onDelete }: BlogPostListProps) {
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white rounded-2xl shadow border border-gray-200">
             <thead>
-              <tr className="bg-gradient-to-r from-blue-500 to-purple-400 text-white">
+              <tr className="bg-linear-to-r from-blue-500 to-purple-400 text-white">
                 <th className="px-6 py-3 text-left font-bold rounded-tl-2xl">Image</th>
                 <th className="px-6 py-3 text-left font-bold">Title</th>
                 <th className="px-6 py-3 text-left font-bold">Category</th>

@@ -56,7 +56,7 @@ export default function TestimonialsAdmin() {
       <GlassCard className="p-0 overflow-x-auto">
         <table className="min-w-full bg-transparent rounded-xl">
           <thead>
-            <tr className="bg-gradient-to-r from-primary/10 to-secondary/10">
+            <tr className="bg-linear-to-r from-primary/10 to-secondary/10">
               <th className="px-6 py-3 text-left font-semibold text-gray-700">Name</th>
               <th className="px-6 py-3 text-left font-semibold text-gray-700">Role</th>
               <th className="px-6 py-3 text-left font-semibold text-gray-700">Quote</th>

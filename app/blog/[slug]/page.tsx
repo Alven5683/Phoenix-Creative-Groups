@@ -48,7 +48,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
   return (
     <>
       <Navbar />
-      <div className="pt-20 min-h-screen bg-gradient-to-br from-gray-50 to-white">
+      <div className="pt-20 min-h-screen bg-linear-to-br from-gray-50 to-white">
         {/* Article Header */}
         <section className="py-12">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

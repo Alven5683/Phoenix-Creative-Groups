@@ -138,7 +138,7 @@ export default function BlogPostForm({ initial, onSave, onClose, autoSlug, categ
   return (
     <form className="w-full flex flex-row gap-8" onSubmit={handleSubmit} aria-label="Blog Post Form">
       {/* Left column: 20% */}
-      <div className="w-1/5 min-w-[200px] flex flex-col gap-4">
+      <div className="w-1/5 min-w-50 flex flex-col gap-4">
         <label className="block text-gray-300 mb-1">Category</label>
         <select className="px-4 py-3 rounded-lg bg-dark/80 border border-glassBorder text-white" value={category} onChange={e => setCategory(e.target.value)} required>
           <option value="">Select Category</option>
@@ -243,7 +243,7 @@ export default function BlogPostForm({ initial, onSave, onClose, autoSlug, categ
           }}
         />
         <div className="flex gap-4 mt-4">
-          <button type="submit" className="px-6 py-3 rounded-xl bg-gradient-to-r from-pink-500 to-indigo-500 text-black font-semibold shadow-lg hover:scale-105 transition-transform" disabled={saving}>{saving ? "Saving..." : "Save"}</button>
+          <button type="submit" className="px-6 py-3 rounded-xl bg-linear-to-r from-pink-500 to-indigo-500 text-black font-semibold shadow-lg hover:scale-105 transition-transform" disabled={saving}>{saving ? "Saving..." : "Save"}</button>
           <button type="button" className="px-6 py-3 rounded-xl bg-gray-200 text-black font-semibold shadow-lg hover:scale-105 transition-transform" onClick={onClose}>Cancel</button>
         </div>
       </div>
