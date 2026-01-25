@@ -1,7 +1,7 @@
 // DEPRECATED: This file is no longer used. The page is now in app/website-cost-calculator/page.tsx. You can safely delete this file.
 "use client";
 import React, { useState } from "react";
-import { Helmet } from "react-helmet";
+import Head from "next/head";
 import toast, { Toaster } from "react-hot-toast";
 import Navbar from "../components/Navbar";
 
@@ -91,13 +91,13 @@ const WebsiteCostCalculator = () => {
 
   return (
     <>
-      <Helmet>
+      <Head>
         <title>Website Cost Calculator | Phoenix Creative Group</title>
         <meta
           name="description"
           content="Instantly calculate website design costs and request a proposal. Get pricing for business, eCommerce, and custom websites."
         />
-      </Helmet>
+      </Head>
 
       <Navbar />
       <Toaster />
