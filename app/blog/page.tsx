@@ -187,12 +187,18 @@ const BlogPage = () => {
                   </p>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <img
-                        src={post.author.avatar}
-                        alt={post.author.name}
-                        className="w-8 h-8 rounded-full"
-                      />
-                      <span className="text-sm text-gray-600">{post.author.name}</span>
+                      {post.author && post.author.avatar ? (
+                        <img
+                          src={post.author.avatar}
+                          alt={post.author.name || "Author"}
+                          className="w-8 h-8 rounded-full"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-xs">
+                          ?
+                        </div>
+                      )}
+                      <span className="text-sm text-gray-600">{post.author?.name || "Unknown Author"}</span>
                     </div>
                     <Link
                       href={`/blog/${post.slug}`}

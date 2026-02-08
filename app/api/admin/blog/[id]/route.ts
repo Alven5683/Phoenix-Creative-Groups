@@ -9,9 +9,18 @@ export async function GET(
 ) {
   await dbConnect();
   const { id } = await context.params;
-  const post = await BlogPost.findOne({ slug: id })
-    .populate('author', 'name')
-    .populate('category', 'name');
+  // Check if id is a valid ObjectId
+  const isObjectId = typeof id === 'string' && /^[a-fA-F0-9]{24}$/.test(id);
+  let post = null;
+  if (isObjectId) {
+    post = await BlogPost.findById(id)
+      .populate('author', 'name')
+      .populate('category', 'name');
+  } else {
+    post = await BlogPost.findOne({ slug: id })
+      .populate('author', 'name')
+      .populate('category', 'name');
+  }
   if (!post) {
     return NextResponse.json({ error: 'Post not found' }, { status: 404 });
   }

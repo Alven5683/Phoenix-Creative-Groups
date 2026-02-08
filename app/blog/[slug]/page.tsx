@@ -51,7 +51,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
       <div className="pt-20 min-h-screen bg-linear-to-br from-gray-50 to-white">
         {/* Article Header */}
         <section className="py-12">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <MotionDiv
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -113,11 +113,14 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
               {/* Featured Image */}
               {post.image && (
                 <div className="bg-white/70 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-4 shadow-lg mb-8">
-                  <img 
-                    src={post.image} 
-                    alt={post.title}
-                    className="w-full h-64 md:h-96 object-cover rounded-xl"
-                  />
+                  <div className="w-full aspect-[16/7] overflow-hidden rounded-xl">
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      className="w-full h-full object-cover rounded-xl"
+                      style={{ display: 'block', background: '#111' }}
+                    />
+                  </div>
                 </div>
               )}
             </MotionDiv>
@@ -126,21 +129,18 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
 
         {/* Article Content */}
         <section className="pb-12">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-6xl mx-auto px-2 sm:px-4 lg:px-8">
             <MotionDiv
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="bg-white/70 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-8 shadow-lg"
+              className="bg-white rounded-xl shadow-xl border border-gray-200/80 p-0 md:p-0 flex justify-center"
             >
-              <article className="prose prose-slate lg:prose-lg max-w-none">
-                {/<[a-z][\s\S]*>/i.test(post.content)
-                  ? <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }} />
-                  : post.content.split('\n').map((line: string, idx: number) => (
-                      <p key={idx}>{line}</p>
-                    ))
-                }
-              </article>
+              <div
+                className="google-doc-style w-full max-w-6xl min-h-[900px] bg-white px-6 py-10 md:px-12 md:py-16 rounded-xl shadow-none border-none text-black text-[1.08rem] leading-[1.9] font-sans mx-auto"
+                style={{ boxShadow: '0 1px 8px 0 rgba(60,60,60,0.08)', fontFamily: 'Inter, Segoe UI, Arial, sans-serif' }}
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
+              />
             </MotionDiv>
           </div>
         </section>
@@ -148,7 +148,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
         {/* Related Posts */}
         {relatedPosts.length > 0 && (
           <section className="py-12 bg-gray-50/50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
               <MotionDiv
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -203,7 +203,6 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
           </section>
         )}
       </div>
-      <Footer />
     </>
   );
 }

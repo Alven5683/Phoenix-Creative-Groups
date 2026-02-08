@@ -1,3 +1,94 @@
+/* Google Docs style paragraph spacing for blog content */
+.google-doc-style p {
+  margin-bottom: 1.25em;
+}
+
+/* Google Docs style enhancements */
+
+.google-doc-style h1, .google-doc-style h2, .google-doc-style h3, .google-doc-style h4, .google-doc-style h5, .google-doc-style h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 0.7em;
+  margin-top: 2em;
+}
+.google-doc-style h1 {
+  font-size: 2.2rem;
+  margin-top: 2.5em;
+  margin-bottom: 1.2em;
+}
+.google-doc-style h2 {
+  font-size: 1.6rem;
+  color: #222257;
+  border-bottom: 1.5px solid #e5e7eb;
+  padding-bottom: 0.2em;
+  margin-top: 2em;
+  margin-bottom: 1em;
+}
+.google-doc-style h3 {
+  font-size: 1.25rem;
+  color: #444;
+  margin-top: 1.5em;
+  margin-bottom: 0.8em;
+}
+.google-doc-style h4 {
+  font-size: 1.1rem;
+  color: #555;
+  margin-top: 1.2em;
+  margin-bottom: 0.7em;
+}
+
+.google-doc-style ul, .google-doc-style ol {
+  margin-bottom: 1.25em;
+  padding-left: 2em;
+}
+.google-doc-style ul {
+  list-style-type: disc;
+}
+.google-doc-style ol {
+  list-style-type: decimal;
+}
+.google-doc-style li {
+  margin-bottom: 0.5em;
+}
+
+.google-doc-style table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 1.5em;
+  background: #fff;
+  font-size: 1rem;
+}
+.google-doc-style th, .google-doc-style td {
+  border: 1px solid #e5e7eb;
+  padding: 0.6em 1em;
+  text-align: left;
+}
+.google-doc-style th {
+  background: #f3f6fb;
+  font-weight: 600;
+}
+
+.google-doc-style blockquote {
+  border-left: 4px solid #a259ff;
+  background: #f8f6ff;
+  margin: 1.5em 0;
+  padding: 0.8em 1.5em;
+  color: #444;
+  font-style: italic;
+}
+
+.google-doc-style code, .google-doc-style pre {
+  background: #f3f6fb;
+  color: #a259ff;
+  border-radius: 0.3em;
+  padding: 0.2em 0.4em;
+  font-size: 0.97em;
+  font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+}
+.google-doc-style pre {
+  padding: 1em;
+  overflow-x: auto;
+}
 /* Dashboard theme overrides */
 body, .min-h-screen {
   background: #f8fafc;
