@@ -1,9 +1,10 @@
+import ClientSanitizedContent from '@/components/ClientSanitizedContent';
+import DOMPurify from 'dompurify';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Calendar, ArrowLeft, ArrowRight, Share2, BookOpen } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import DOMPurify from 'isomorphic-dompurify';
 import MotionDiv from '@/components/MotionDiv';
 
 type BlogPost = {
@@ -117,7 +118,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                     <img
                       src={post.image}
                       alt={post.title}
-                      className="w-full h-full object-cover rounded-xl"
+                      className="w-full h-full object-cover rounded-xl aspect-16/7"
                       style={{ display: 'block', background: '#111' }}
                     />
                   </div>
@@ -137,10 +138,11 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
               className="bg-white rounded-xl shadow-xl border border-gray-200/80 p-0 md:p-0 flex justify-center"
             >
               <div
-                className="google-doc-style w-full max-w-6xl min-h-[900px] bg-white px-6 py-10 md:px-12 md:py-16 rounded-xl shadow-none border-none text-black text-[1.08rem] leading-[1.9] font-sans mx-auto"
+                className="google-doc-style w-full max-w-6xl min-h-225 bg-white px-6 py-10 md:px-12 md:py-16 rounded-xl shadow-none border-none text-black text-[1.08rem] leading-[1.9] font-sans mx-auto"
                 style={{ boxShadow: '0 1px 8px 0 rgba(60,60,60,0.08)', fontFamily: 'Inter, Segoe UI, Arial, sans-serif' }}
-                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
-              />
+              >
+                <ClientSanitizedContent html={post.content} />
+              </div>
             </MotionDiv>
           </div>
         </section>
