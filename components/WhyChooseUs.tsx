@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Zap, Shield, Palette } from 'lucide-react';
 
 type Feature = {
-  icon: React.ElementType;
+  icon: React.ComponentType<{ className?: string; 'aria-hidden'?: boolean }>;
   title: string;
   description: string;
 };
@@ -68,7 +68,7 @@ const WhyChooseUs = () => {
                 aria-label={feature.title}
               >
                 <div className="bg-gray-100 rounded-full w-16 h-16 flex items-center justify-center mb-6">
-                  <Icon className="h-8 w-8 text-black" aria-hidden="true" />
+                  <Icon className="h-8 w-8 text-black" aria-hidden={true} />
                 </div>
                 <h3 className="text-xl font-semibold text-black mb-4">{feature.title}</h3>
                 <p className="text-gray-600 leading-relaxed">{feature.description}</p>

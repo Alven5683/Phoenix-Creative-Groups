@@ -4,7 +4,7 @@ import React from 'react';
 import { Brain, Code2, Settings2, Search, Server, Globe2 } from 'lucide-react';
 
 type Service = {
-  icon: React.ElementType;
+  icon: React.ComponentType<{ className?: string; 'aria-hidden'?: boolean }>;
   title: string;
   description: string;
 };
@@ -80,7 +80,7 @@ const Services = () => {
                 viewport={{ once: true }}
               >
                 <div className="bg-gray-100 rounded-full w-14 h-14 flex items-center justify-center mb-6">
-                  <Icon className="h-7 w-7 text-black" aria-hidden="true" />
+                  <Icon className="h-7 w-7 text-black" aria-hidden={true} />
                 </div>
                 <h3 className="text-xl font-semibold text-black mb-2">{service.title}</h3>
                 <p className="text-gray-600 mb-4">{service.description}</p>

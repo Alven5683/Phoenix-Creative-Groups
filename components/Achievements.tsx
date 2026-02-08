@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Award, Star, ThumbsUp } from 'lucide-react';
 
 type Achievement = {
-  icon: React.ElementType;
+  icon: React.ComponentType<{ className?: string; 'aria-hidden'?: boolean }>;
   value: string;
   label: string;
   description: string;
@@ -66,7 +66,7 @@ const Achievements = () => {
                 aria-label={item.label}
               >
                 <div className="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
-                  <Icon className="h-10 w-10 text-black" aria-hidden="true" />
+                  <Icon className="h-10 w-10 text-black" aria-hidden={true} />
                 </div>
                 <div className="text-5xl font-bold text-black mb-2">{item.value}</div>
                 <div className="text-xl font-semibold text-gray-800 mb-4">{item.label}</div>

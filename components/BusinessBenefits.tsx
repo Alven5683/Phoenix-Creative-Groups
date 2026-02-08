@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { ShieldCheck, BarChart, CloudLightning, Users, Settings, Rocket } from 'lucide-react';
 
 type Benefit = {
-  icon: React.ElementType;
+  icon: React.ComponentType<{ className?: string; 'aria-hidden'?: boolean }>;
   title: string;
   description: string;
 };
@@ -84,7 +84,7 @@ const BusinessBenefits = () => {
                 aria-label={benefit.title}
               >
                 <div className="bg-gray-100 rounded-full w-16 h-16 flex items-center justify-center mb-6">
-                  <Icon className="h-8 w-8 text-black" aria-hidden="true" />
+                  <Icon className="h-8 w-8 text-black" aria-hidden={true} />
                 </div>
                 <h3 className="text-xl font-semibold text-black mb-4">{benefit.title}</h3>
                 <p className="text-gray-600 leading-relaxed">{benefit.description}</p>
