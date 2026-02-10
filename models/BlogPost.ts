@@ -1,4 +1,7 @@
+
 import mongoose, { Schema, models, model } from 'mongoose';
+import '../models/Category';
+import '../models/Author';
 
 
 const BlogPostModelSchema = new Schema({
