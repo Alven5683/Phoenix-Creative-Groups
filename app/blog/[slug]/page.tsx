@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Calendar, ArrowLeft, ArrowRight, Share2, BookOpen } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import DOMPurify from 'isomorphic-dompurify';
+import SafeHtmlContent from '@/components/SafeHtmlContent';
 import MotionDiv from '@/components/MotionDiv';
 
 type BlogPost = {
@@ -113,7 +113,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
               {/* Featured Image */}
               {post.image && (
                 <div className="bg-white/70 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-4 shadow-lg mb-8">
-                  <div className="w-full aspect-[16/7] overflow-hidden rounded-xl">
+                  <div className="w-full aspect-16/7 overflow-hidden rounded-xl">
                     <img
                       src={post.image}
                       alt={post.title}
@@ -136,10 +136,10 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
               transition={{ duration: 0.8, delay: 0.2 }}
               className="bg-white rounded-xl shadow-xl border border-gray-200/80 p-0 md:p-0 flex justify-center"
             >
-              <div
-                className="google-doc-style w-full max-w-6xl min-h-[900px] bg-white px-6 py-10 md:px-12 md:py-16 rounded-xl shadow-none border-none text-black text-[1.08rem] leading-[1.9] font-sans mx-auto"
+              <SafeHtmlContent
+                html={post.content}
+                className="google-doc-style w-full max-w-6xl min-h-225 bg-white px-6 py-10 md:px-12 md:py-16 rounded-xl shadow-none border-none text-black text-[1.08rem] leading-[1.9] font-sans mx-auto"
                 style={{ boxShadow: '0 1px 8px 0 rgba(60,60,60,0.08)', fontFamily: 'Inter, Segoe UI, Arial, sans-serif' }}
-                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
               />
             </MotionDiv>
           </div>
