@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
-import mongoose from 'mongoose';
 import { dbConnect } from '@/lib/db';
-
-const Testimonial = mongoose.models.Testimonial || mongoose.model('Testimonial');
+import Testimonial from '@/models/Testimonial';
 
 export async function POST(req: Request) {
   const { id, status } = await req.json();
