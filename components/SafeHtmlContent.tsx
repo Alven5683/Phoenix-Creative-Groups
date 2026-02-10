@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import DOMPurify from "dompurify";
 
 interface SafeHtmlContentProps {
   html: string;
@@ -9,8 +8,20 @@ interface SafeHtmlContentProps {
 }
 
 const SafeHtmlContent: React.FC<SafeHtmlContentProps> = ({ html, className, style }) => {
-  // Sanitize HTML only on client
-  const sanitized = React.useMemo(() => DOMPurify.sanitize(html), [html]);
+  const [sanitized, setSanitized] = React.useState("");
+
+  React.useEffect(() => {
+    let isMounted = true;
+    import("dompurify").then((DOMPurify) => {
+      if (isMounted) {
+        setSanitized(DOMPurify.default.sanitize(html));
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, [html]);
+
   return (
     <div
       className={className}
