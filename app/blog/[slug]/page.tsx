@@ -21,18 +21,22 @@ type BlogPost = {
 
 
 function getBaseUrl() {
-  // Removed: Not needed for server-side fetches
-  return '';
+  if (typeof window === "undefined") {
+    // Server-side: use absolute URL
+    return process.env.NEXT_PUBLIC_BASE_URL || "https://phoenixcreativegroup.vercel.app";
+  }
+  // Client-side: use relative URL
+  return "";
 }
 
 async function getBlogPost(slug: string): Promise<BlogPost | null> {
-  const res = await fetch(`/api/admin/blog/${slug}`, { cache: 'no-store' });
+  const res = await fetch(getBaseUrl() + `/api/admin/blog/${slug}`, { cache: 'no-store' });
   if (!res.ok) return null;
   return res.json();
 }
 
 async function getRelatedPosts(slug: string, category: string | { name?: string } | undefined, id: string): Promise<BlogPost[]> {
-  const res = await fetch(`/api/admin/blog?relatedTo=${slug}`, { cache: 'no-store' });
+  const res = await fetch(getBaseUrl() + `/api/admin/blog?relatedTo=${slug}`, { cache: 'no-store' });
   if (!res.ok) return [];
   const data = await res.json();
   // Filter out current post and limit to 3, match category
