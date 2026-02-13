@@ -9,6 +9,7 @@ const adminLinks = [
 	{ href: "/admin/requests/contact", label: "Contact Us Requests", icon: FileText },
 	{ href: "/admin/services", label: "Services", icon: Layers },
 	{ href: "/admin/portfolio", label: "Portfolio", icon: Image },
+	{ href: "/admin/portfolio-upload", label: "Add Portfolio", icon: Image },
 	{ href: "/admin/blog", label: "Blog", icon: BookOpen },
 	{ href: "/admin/categories", label: "Categories", icon: Layers },
 	{ href: "/admin/authors", label: "Authors", icon: BookOpen },

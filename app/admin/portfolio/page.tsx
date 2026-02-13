@@ -2,7 +2,7 @@
 import AdminSidebar from '../../../components/AdminSidebar';
 import AdminTopbar from '../../../components/AdminTopbar';
 import GlassCard from '../../../components/GlassCard';
-import PortfolioForm from '../../../components/PortfolioForm';
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -16,8 +16,7 @@ type Project = {
 const AdminPortfolio = () => {
 	const [projects, setProjects] = useState<Project[]>([]);
 	const [loading, setLoading] = useState(true);
-	const [showForm, setShowForm] = useState(false);
-	const [editProject, setEditProject] = useState<Project | null>(null);
+	const router = useRouter();
 
 	useEffect(() => {
 		fetchProjects();
@@ -56,23 +55,7 @@ const AdminPortfolio = () => {
 		}
 	}
 
-	async function handleSave(data: any) {
-		try {
-			if (editProject) {
-				const res = await axios.put(`/api/admin/portfolio/${editProject._id}`, data);
-				setProjects((prev) => prev.map((p) => p._id === editProject._id ? res.data : p));
-				toast.success("Project updated");
-			} else {
-				const res = await axios.post("/api/admin/portfolio", data);
-				setProjects((prev) => [res.data, ...prev]);
-				toast.success("Project created");
-			}
-			setShowForm(false);
-			setEditProject(null);
-		} catch (e) {
-			toast.error("Save failed");
-		}
-	}
+
 
 	return (
 		<div className="min-h-screen flex bg-gray-50">
@@ -84,7 +67,7 @@ const AdminPortfolio = () => {
 						<h1 className="text-4xl font-bold text-gray-900">Portfolio</h1>
 						<button
 							className="px-6 py-3 rounded-xl bg-linear-to-r from-primary to-secondary text-white font-semibold shadow hover:from-secondary hover:to-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
-							onClick={() => { setShowForm(true); setEditProject(null); }}
+							onClick={() => router.push("/admin/portfolio-upload")}
 						>
 							Add Project
 						</button>
@@ -100,7 +83,7 @@ const AdminPortfolio = () => {
 									<div className="flex gap-3 mt-2">
 										<button
 											className="px-4 py-2 rounded-lg bg-linear-to-r from-primary to-secondary text-white font-semibold shadow hover:from-secondary hover:to-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
-											onClick={() => { setEditProject(p); setShowForm(true); }}
+											onClick={() => router.push(`/admin/portfolio-upload?id=${p._id}`)}
 										>
 											Edit
 										</button>
@@ -119,17 +102,6 @@ const AdminPortfolio = () => {
 									</div>
 								</div>
 							))}
-						</div>
-					)}
-					{showForm && (
-						<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-							<div className="bg-white rounded-2xl p-6 w-full max-w-lg shadow-2xl border border-gray-200">
-								<PortfolioForm
-									initial={editProject}
-									onSave={handleSave}
-									onClose={() => { setShowForm(false); setEditProject(null); }}
-								/>
-							</div>
 						</div>
 					)}
 				</div>

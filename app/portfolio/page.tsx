@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from "react";
 import GlassCard from "../../components/GlassCard";
+import Link from "next/link";
 
 type Portfolio = {
   _id: string;
@@ -53,18 +54,18 @@ export default function PortfolioPage() {
           transition={{ duration: 0.7, ease: 'easeOut' }}
         >
           {projects.map((project) => (
-            <GlassCard key={project._id} className="p-6">
-              <h2 className="text-2xl font-display font-bold mb-2 text-accent-cyan drop-shadow">
-                {project.title}
-              </h2>
-              <p className="mb-4 text-lg text-gray-100/90">{project.description}</p>
-              {project.image && (
-                <img src={project.image} alt={project.title} className="mb-4 rounded-lg w-full h-40 object-cover border border-glassBorder shadow-glass" />
-              )}
-              {project.projectUrl && (
-                <a href={project.projectUrl} target="_blank" rel="noopener noreferrer" className="text-accent-neon underline font-semibold">View Project</a>
-              )}
-            </GlassCard>
+            <Link key={project._id} href={`/portfolio/${project._id}`} className="block focus:outline-none focus:ring-2 focus:ring-accent-cyan rounded-lg">
+              <GlassCard className="p-6 cursor-pointer hover:shadow-xl transition-shadow">
+                <h2 className="text-2xl font-display font-bold mb-2 text-accent-cyan drop-shadow">
+                  {project.title}
+                </h2>
+                <p className="mb-4 text-lg text-gray-900 dark:text-gray-100/90">{project.description}</p>
+                {project.image && (
+                  <img src={project.image} alt={project.title} className="mb-4 rounded-lg w-full h-40 object-cover border border-glassBorder shadow-glass" />
+                )}
+                <span className="text-accent-neon underline font-semibold">View Project</span>
+              </GlassCard>
+            </Link>
           ))}
         </motion.div>
       )}

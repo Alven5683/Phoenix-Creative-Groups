@@ -27,7 +27,7 @@ export default function GlassCard({ className = "", children }: GlassCardProps) 
 	return (
 		<motion.div
 			ref={ref}
-			className={`bg-surface bg-gradient-glass shadow-3d rounded-glass p-6 transition-all duration-300 backdrop-blur-glass border border-glassBorder ${className}`}
+			className={`bg-white/30 dark:bg-gray-900/30 backdrop-blur-md border border-glassBorder shadow-glass rounded-lg p-6 transition-all duration-300 ${className}`}
 			initial={{ opacity: 0, y: 40, rotateX: 10 }}
 			whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
 			viewport={{ once: true }}
