@@ -46,15 +46,15 @@ export default function PortfolioUploadPage() {
       <AdminSidebar />
       <div className="flex-1 flex flex-col min-h-screen">
         <AdminTopbar />
-        <main className="flex-1 flex flex-col items-center justify-center py-12 px-4">
-          <div className="w-full max-w-xl mx-auto glass-card p-10 flex flex-col items-center justify-center">
-            <h1 className="text-4xl font-extrabold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary drop-shadow-lg">
+        <main className="flex-1 flex flex-col items-center justify-center px-2 md:px-8">
+           <div className="w-full max-w-5xl mx-auto glass-card p-10 flex flex-col items-center justify-center" style={{minWidth:0}}>
+            <h1 className="text-4xl font-extrabold mb-8 text-center bg-clip-text text-transparent bg-linear-to-r from-primary to-secondary drop-shadow-lg">
               {id ? "Edit Portfolio Project" : "Upload Portfolio Project"}
             </h1>
             {loading ? (
               <div className="text-center text-gray-400 text-lg font-medium">Loading...</div>
             ) : (
-              <PortfolioForm onSave={handleSave} initial={initial} />
+              <PortfolioForm onSave={handleSave} initial={initial} onClose={() => window.history.back()} />
             )}
             {success && <div className="mt-6 text-green-600 text-center font-semibold text-lg rounded-xl bg-green-50/80 px-4 py-2 shadow">Portfolio {id ? "updated" : "uploaded"} successfully!</div>}
             {error && <div className="mt-6 text-red-600 text-center font-semibold text-lg rounded-xl bg-red-50/80 px-4 py-2 shadow">{error}</div>}

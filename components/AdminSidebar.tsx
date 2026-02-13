@@ -22,7 +22,7 @@ const adminLinks = [
 export default function AdminSidebar() {
 	const pathname = usePathname();
 	return (
-		<aside className="hidden md:flex flex-col w-64 min-h-screen bg-white shadow-lg border-r border-gray-100 p-6 mt-16" aria-label="Admin Sidebar">
+		<aside className="hidden md:flex flex-col w-64 min-h-screen bg-white shadow-lg border-r border-gray-100 p-6 mt-18" aria-label="Admin Sidebar">
 			<div className="mb-10 text-2xl font-extrabold text-primary tracking-tight flex items-center gap-2 select-none">
 				<span className="inline-block w-3 h-3 rounded-full bg-linear-to-r from-primary to-secondary mr-2" />
 				Phoenix Creative

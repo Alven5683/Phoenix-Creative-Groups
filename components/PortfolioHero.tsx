@@ -3,6 +3,7 @@ import React from "react";
 export interface PortfolioDetail {
   id: string;
   title: string;
+  subtitle?: string;
   category: string;
   shortDescription: string;
   description: string;
@@ -28,6 +29,7 @@ export interface PortfolioDetail {
   solution?: string;
   results?: { stat: string; description: string }[];
   gallery?: string[];
+  highlights?: { icon: string; text: string }[];
 }
 
 export default function PortfolioHero({ project }: { project: PortfolioDetail }) {

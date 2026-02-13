@@ -3,7 +3,7 @@ import { LogOut } from "lucide-react";
 export default function AdminTopbar() {
 	// Placeholder for admin user info and logout
 	 return (
-	   <header className="w-full bg-glass/80 backdrop-blur-xl border-b border-glassBorder/40 px-6 py-4 flex items-center justify-between">
+	   <header className="w-full bg-glass/80 backdrop-blur-xl border-b border-glassBorder/40 px-2 py-2 flex items-center justify-between">
 	     <div className="text-lg font-semibold text-foreground tracking-tight">Phoenix Admin</div>
 	     <button
 	       type="button"
