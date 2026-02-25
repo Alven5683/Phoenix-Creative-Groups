@@ -20,7 +20,8 @@ export default function AdminLogin() {
 		if (res.ok) {
 			router.push("/admin/dashboard");
 		} else {
-			setError("Invalid admin secret");
+			const data = await res.json().catch(() => null);
+			setError(data?.error || "Login failed");
 		}
 	}
 

@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Category from '@/models/Category';
 import { dbConnect } from '@/lib/db';
+import { requireAdmin } from '@/lib/adminAuth';
 
 // DELETE /api/admin/categories/[name]
 export async function DELETE(request: NextRequest, context: { params: Promise<{ name: string }> }) {
+  const unauthorized = await requireAdmin();
+  if (unauthorized) return unauthorized;
   await dbConnect();
   const { name } = await context.params;
   if (!name) {

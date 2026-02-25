@@ -1,10 +1,13 @@
 import { NextResponse } from 'next/server';
 import { dbConnect } from '@/lib/db';
 import Service from '@/models/Service';
+import { requireAdmin } from '@/lib/adminAuth';
 
 import { NextRequest } from 'next/server';
 
 export async function GET(request: NextRequest, context: { params: Promise<{ slug: string }> }) {
+  const unauthorized = await requireAdmin();
+  if (unauthorized) return unauthorized;
   await dbConnect();
   const params = await context.params;
   const slug = params.slug;
@@ -16,6 +19,8 @@ export async function GET(request: NextRequest, context: { params: Promise<{ slu
 }
 
 export async function PUT(request: NextRequest, context: { params: Promise<{ slug: string }> }) {
+  const unauthorized = await requireAdmin();
+  if (unauthorized) return unauthorized;
   await dbConnect();
   const params = await context.params;
   const slug = params.slug;

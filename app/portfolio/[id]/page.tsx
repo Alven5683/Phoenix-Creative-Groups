@@ -6,6 +6,7 @@ import PortfolioDescription from "components/PortfolioDescription";
 import PortfolioMetaSidebar from "components/PortfolioMetaSidebar";
 import PortfolioFAQ from "components/PortfolioFAQ";
 import RelatedProjects from "components/RelatedProjects";
+import SafeHtmlContent from "@/components/SafeHtmlContent";
 
 export default function PortfolioDetailPage() {
   const { id } = useParams();
@@ -16,7 +17,7 @@ export default function PortfolioDetailPage() {
     async function fetchProject() {
       setLoading(true);
       try {
-        const res = await fetch(`/api/admin/portfolio/${id}`);
+        const res = await fetch(`/api/public/portfolio/${id}`);
         const data = await res.json();
         setProject(data);
       } catch {
@@ -99,7 +100,7 @@ export default function PortfolioDetailPage() {
               <h2 className={h2 + " mb-6"}>Overview</h2>
               <div className={body + " mb-4"}>{project.shortDescription || project.description}</div>
               {project.content && (
-                <div className={body + " mb-2"} dangerouslySetInnerHTML={{ __html: project.content }} />
+                <SafeHtmlContent html={project.content} className={body + " mb-2"} />
               )}
               <div className="flex flex-wrap gap-3 mt-4 items-center">
                 {project.projectUrl && (

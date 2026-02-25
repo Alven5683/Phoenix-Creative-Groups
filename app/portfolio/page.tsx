@@ -20,7 +20,7 @@ export default function PortfolioPage() {
     async function fetchProjects() {
       setLoading(true);
       try {
-        const res = await fetch("/api/admin/portfolio");
+        const res = await fetch("/api/public/portfolio");
         const data = await res.json();
         setProjects(data);
       } catch {

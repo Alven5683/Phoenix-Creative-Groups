@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { motion } from 'framer-motion';
 import { useParams } from "next/navigation";
+import SafeHtmlContent from "@/components/SafeHtmlContent";
 
 export default function ServiceDetailPage() {
   const { slug } = useParams();
@@ -12,7 +13,7 @@ export default function ServiceDetailPage() {
     async function fetchService() {
       setLoading(true);
       try {
-        const res = await fetch(`/api/admin/services/${slug}`);
+        const res = await fetch(`/api/public/services/${slug}`);
         const data = await res.json();
         setService(data);
       } catch {
@@ -49,7 +50,7 @@ export default function ServiceDetailPage() {
         <h1 className="text-3xl font-bold mb-4 text-black">{service.title}</h1>
         <p className="mb-4 text-gray-700">{service.description}</p>
         {service.content && (
-          <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: service.content }} />
+          <SafeHtmlContent html={service.content} className="prose max-w-none" />
         )}
       </div>
     </motion.div>

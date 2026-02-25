@@ -2,8 +2,11 @@ import { NextResponse } from 'next/server';
 
 import { dbConnect } from '@/lib/db';
 import { Testimonial } from '@/lib/testimonials';
+import { requireAdmin } from '@/lib/adminAuth';
 
 export async function GET() {
+  const unauthorized = await requireAdmin();
+  if (unauthorized) return unauthorized;
   await dbConnect();
   const testimonials = await Testimonial.find({});
   const mapped = testimonials.map((t: any) => ({

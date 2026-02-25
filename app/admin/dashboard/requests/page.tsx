@@ -36,7 +36,7 @@ export default function AdminRequestsPage() {
         const data = await res.json();
         setRequests(
           (Array.isArray(data) ? data : []).map((r: any) => ({
-            id: r.id || '',
+            id: r.id || r._id || '',
             name: r.name || '',
             email: r.email || '',
             phone: r.phone || '',

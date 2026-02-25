@@ -2,11 +2,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { dbConnect } from '@/lib/db';
 import BlogPost from '@/models/BlogPost';
+import { requireAdmin } from '@/lib/adminAuth';
 
 export async function GET(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
+  const unauthorized = await requireAdmin();
+  if (unauthorized) return unauthorized;
   await dbConnect();
   const { id } = await context.params;
   // Check if id is a valid ObjectId
@@ -31,6 +34,8 @@ export async function PUT(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
+  const unauthorized = await requireAdmin();
+  if (unauthorized) return unauthorized;
   await dbConnect();
   const { id } = await context.params;
   const data = await request.json();
@@ -49,6 +54,8 @@ export async function DELETE(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
+  const unauthorized = await requireAdmin();
+  if (unauthorized) return unauthorized;
   await dbConnect();
   const { id } = await context.params;
   try {

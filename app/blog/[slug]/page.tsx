@@ -30,13 +30,13 @@ function getBaseUrl() {
 }
 
 async function getBlogPost(slug: string): Promise<BlogPost | null> {
-  const res = await fetch(getBaseUrl() + `/api/admin/blog/${slug}`, { cache: 'no-store' });
+  const res = await fetch(getBaseUrl() + `/api/public/blog/${slug}`, { cache: 'no-store' });
   if (!res.ok) return null;
   return res.json();
 }
 
 async function getRelatedPosts(slug: string, category: string | { name?: string } | undefined, id: string): Promise<BlogPost[]> {
-  const res = await fetch(getBaseUrl() + `/api/admin/blog?relatedTo=${slug}`, { cache: 'no-store' });
+  const res = await fetch(getBaseUrl() + `/api/public/blog?relatedTo=${slug}`, { cache: 'no-store' });
   if (!res.ok) return [];
   const data = await res.json();
   // Filter out current post and limit to 3, match category

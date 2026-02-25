@@ -113,17 +113,20 @@ export default function AdminAuthorsPage() {
                           <button
                             className="px-4 py-2 bg-linear-to-r from-primary to-secondary text-white rounded-lg font-semibold shadow hover:from-secondary hover:to-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
                             onClick={async () => {
-                              if (editAuthorValue && editAuthorValue !== author.name) {
+                              if (editAuthorValue) {
                                 await fetch("/api/admin/authors/edit", {
                                   method: "PUT",
                                   headers: { "Content-Type": "application/json" },
                                   body: JSON.stringify({
                                     _id: author._id,
-                                    name: editAuthorValue,
+                                    oldName: author.name,
+                                    newName: editAuthorValue,
                                     role: editAuthorRole,
                                     avatar: editAuthorAvatar,
-                                    facebook: editAuthorFacebook,
-                                    linkedin: editAuthorLinkedin
+                                    social: {
+                                      facebook: editAuthorFacebook,
+                                      linkedin: editAuthorLinkedin
+                                    }
                                   }),
                                 });
                                 setEditAuthor(null);
@@ -232,8 +235,10 @@ export default function AdminAuthorsPage() {
                               name: newAuthor,
                               role: newRole,
                               avatar: newAvatar,
-                              facebook: newFacebook,
-                              linkedin: newLinkedin
+                              social: {
+                                facebook: newFacebook,
+                                linkedin: newLinkedin
+                              }
                             }),
                           });
                           setNewAuthor("");

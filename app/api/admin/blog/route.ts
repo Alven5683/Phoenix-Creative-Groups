@@ -1,21 +1,24 @@
 import { NextResponse } from 'next/server';
 import { dbConnect } from '@/lib/db';
 import BlogPost from '@/models/BlogPost';
+import { requireAdmin } from '@/lib/adminAuth';
 
 export async function GET() {
+  const unauthorized = await requireAdmin();
+  if (unauthorized) return unauthorized;
   await dbConnect();
   const posts = await BlogPost.find({})
-    .populate('author', 'name')
+    .populate('author', 'name role avatar')
     .populate('category', 'name')
     .sort({ createdAt: -1 });
   return NextResponse.json(posts);
 }
 
 export async function POST(request: Request) {
+  const unauthorized = await requireAdmin();
+  if (unauthorized) return unauthorized;
   await dbConnect();
   const data = await request.json();
-  // ...existing code...
-  // Validate author and category fields
   function isValidObjectId(id: any) {
     return typeof id === 'string' && /^[a-fA-F0-9]{24}$/.test(id);
   }
@@ -35,6 +38,8 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
+  const unauthorized = await requireAdmin();
+  if (unauthorized) return unauthorized;
   await dbConnect();
   const data = await request.json();
   try {
@@ -46,6 +51,8 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+  const unauthorized = await requireAdmin();
+  if (unauthorized) return unauthorized;
   await dbConnect();
   const { _id } = await request.json();
   try {

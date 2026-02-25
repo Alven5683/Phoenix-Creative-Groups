@@ -41,7 +41,7 @@ export default function AdminDashboardPage() {
 			const portfolio = await portfolioRes.json();
 			setStats({
 				services: services.length,
-				publishedPosts: posts.filter((p: any) => p.status === "published").length,
+				publishedPosts: posts.filter((p: any) => (p.status ?? "published") === "published").length,
 				categories: categories.length,
 				authors: authors.length,
 				portfolio: portfolio.length,

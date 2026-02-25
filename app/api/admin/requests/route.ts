@@ -5,9 +5,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { dbConnect } from '@/lib/db';
 import ProposalRequest from '@/models/ProposalRequest';
+import { requireAdmin } from '@/lib/adminAuth';
 
 
 export async function POST(req: NextRequest) {
+  const unauthorized = await requireAdmin();
+  if (unauthorized) return unauthorized;
   await dbConnect();
   const data = await req.json();
   try {
@@ -20,6 +23,8 @@ export async function POST(req: NextRequest) {
 
 
 export async function GET() {
+  const unauthorized = await requireAdmin();
+  if (unauthorized) return unauthorized;
   await dbConnect();
   try {
     const requests = await ProposalRequest.find().sort({ createdAt: -1 });

@@ -41,9 +41,9 @@ const BlogPage = () => {
   useEffect(() => {
     async function fetchData() {
       const [postsRes, categoriesRes, authorsRes] = await Promise.all([
-        fetch("/api/admin/blog"),
-        fetch("/api/admin/categories"),
-        fetch("/api/admin/authors"),
+        fetch("/api/public/blog"),
+        fetch("/api/public/categories"),
+        fetch("/api/public/authors"),
       ]);
       const postsData = await postsRes.json();
       const categoriesData = await categoriesRes.json();

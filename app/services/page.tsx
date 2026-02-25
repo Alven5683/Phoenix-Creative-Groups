@@ -21,7 +21,7 @@ export default function ServicesPage() {
     async function fetchServices() {
       setLoading(true);
       try {
-        const res = await fetch("/api/admin/services");
+        const res = await fetch("/api/public/services");
         const data = await res.json();
         setServices(data);
       } catch {

@@ -13,6 +13,7 @@ const BlogPostModelSchema = new Schema({
   category: { type: Schema.Types.ObjectId, ref: 'Category' },
   date: { type: String },
   readTime: { type: String },
+  status: { type: String, enum: ["draft", "published"], default: "published" },
   author: { type: Schema.Types.ObjectId, ref: 'Author' },
   seoTitle: { type: String },
   seoDescription: { type: String },
