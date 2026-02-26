@@ -1,11 +1,10 @@
-"use client";
+﻿"use client";
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Search, Calendar, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
-// BlogPost type definition for client-side use
+
+// BlogPost type definition for client-side use.
 export type BlogPost = {
   _id?: string;
   title: string;
@@ -33,52 +32,67 @@ export type BlogPost = {
 const BlogPage = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [categories, setCategories] = useState<string[]>(["All"]);
-  const [authors, setAuthors] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
-      const [postsRes, categoriesRes, authorsRes] = await Promise.all([
-        fetch("/api/public/blog"),
-        fetch("/api/public/categories"),
-        fetch("/api/public/authors"),
-      ]);
-      const postsData = await postsRes.json();
-      const categoriesData = await categoriesRes.json();
-      const authorsData = await authorsRes.json();
-      // Merge author details into each post
-      const postsWithAuthors = postsData.map((post: any) => {
-        if (post.author && post.author.name) {
-          const found = authorsData.find((a: any) => a.name === post.author.name);
-          if (found) {
-            return {
-              ...post,
-              author: {
-                ...post.author,
-                role: found.role,
-                avatar: found.avatar,
-                facebook: found.facebook || (found.social && found.social.facebook),
-                linkedin: found.linkedin || (found.social && found.social.linkedin),
-              },
-            };
+      try {
+        const [postsRes, categoriesRes, authorsRes] = await Promise.all([
+          fetch("/api/public/blog"),
+          fetch("/api/public/categories"),
+          fetch("/api/public/authors"),
+        ]);
+
+        const postsData = await postsRes.json();
+        const categoriesData = await categoriesRes.json();
+        const authorsData = await authorsRes.json();
+
+        // Merge author details into each post.
+        const postsWithAuthors = postsData.map((post: any) => {
+          if (post.author && post.author.name) {
+            const found = authorsData.find((a: any) => a.name === post.author.name);
+            if (found) {
+              return {
+                ...post,
+                author: {
+                  ...post.author,
+                  role: found.role,
+                  avatar: found.avatar,
+                  facebook: found.facebook || (found.social && found.social.facebook),
+                  linkedin: found.linkedin || (found.social && found.social.linkedin),
+                },
+              };
+            }
           }
-        }
-        return post;
-      });
-      setPosts(postsWithAuthors);
-      setCategories(["All", ...categoriesData.map((c: any) => c.name)]);
-      setAuthors(authorsData);
-      setLoading(false);
+          return post;
+        });
+
+        setPosts(postsWithAuthors);
+        setCategories(["All", ...categoriesData.map((c: any) => c.name)]);
+      } catch {
+        setPosts([]);
+        setCategories(["All"]);
+      } finally {
+        setLoading(false);
+      }
     }
+
     fetchData();
   }, []);
 
   const filteredPosts = posts.filter((post: BlogPost) => {
-    const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const matchesSearch =
+      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (post.excerpt?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false);
-    const matchesCategory = selectedCategory === "All" || post.category === selectedCategory;
+
+    const postCategory =
+      typeof post.category === "object" && post.category !== null
+        ? post.category.name
+        : post.category;
+
+    const matchesCategory = selectedCategory === "All" || postCategory === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -87,7 +101,7 @@ const BlogPage = () => {
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 24 }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
       className="pt-20 min-h-screen bg-linear-to-br from-gray-50 to-white w-full"
     >
       {/* Hero Section */}
@@ -99,11 +113,9 @@ const BlogPage = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h1 className="text-5xl md:text-6xl font-bold text-black mb-6">
-              Phoenix Blog
-            </h1>
+            <h1 className="text-5xl md:text-6xl font-bold text-black mb-6">Phoenix Blog</h1>
             <p className="text-xl text-gray-600 w-full">
-              Insights, updates, and stories from the future of AI-powered creativity
+              Insights, updates, and stories from the future of AI-powered creativity.
             </p>
           </motion.div>
 
@@ -151,7 +163,7 @@ const BlogPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredPosts.map((post: BlogPost, index: number) => (
               <motion.article
-                key={post._id}
+                key={post._id || post.slug}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: index * 0.1 }}
@@ -159,32 +171,34 @@ const BlogPage = () => {
                 className="bg-white/70 backdrop-blur-sm border border-gray-200/50 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 <div className="h-48 overflow-hidden">
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                  />
+                  {post.image ? (
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                    />
+                  ) : (
+                    <div className="h-full w-full bg-gray-100 flex items-center justify-center text-sm text-gray-500">
+                      No image
+                    </div>
+                  )}
                 </div>
                 <div className="p-6">
                   <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
                     <span className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium">
-                      {typeof post.category === 'object' && post.category !== null && 'name' in post.category
+                      {typeof post.category === "object" && post.category !== null && "name" in post.category
                         ? post.category.name
-                        : typeof post.category === 'string'
+                        : typeof post.category === "string"
                           ? post.category
-                          : ''}
+                          : ""}
                     </span>
                     <div className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" />
                       {post.date}
                     </div>
                   </div>
-                  <h2 className="text-xl font-bold text-black mb-3 line-clamp-2">
-                    {post.title}
-                  </h2>
-                  <p className="text-gray-600 mb-4 line-clamp-3">
-                    {post.excerpt}
-                  </p>
+                  <h2 className="text-xl font-bold text-black mb-3 line-clamp-2">{post.title}</h2>
+                  <p className="text-gray-600 mb-4 line-clamp-3">{post.excerpt}</p>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       {post.author && post.author.avatar ? (
@@ -214,11 +228,7 @@ const BlogPage = () => {
           </div>
 
           {filteredPosts.length === 0 && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center py-12"
-            >
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-12">
               <p className="text-gray-500 text-lg">No articles found matching your criteria.</p>
             </motion.div>
           )}
@@ -229,7 +239,3 @@ const BlogPage = () => {
 };
 
 export default BlogPage;
-
-
-
-

@@ -28,14 +28,14 @@ const features: Feature[] = [
 
 const WhyChooseUs = () => {
   return (
-    <section id="features" className="py-20 bg-white w-full" aria-label="Why Choose Us" style={{width:'100vw', marginLeft:'calc(50% - 50vw)'}}>
+    <section id="features" className="py-20 bg-white w-full" aria-label="Why Choose Us">
       <button className="bg-white shadow-md rounded-full px-4 py-1 text-sm font-semibold flex items-center mx-auto mb-4 focus:outline-none focus:ring-2 focus:ring-glassBorder" tabIndex={0} aria-label="Why Choose Us">
         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h11M9 21V3m13 18V7a2 2 0 00-2-2h-6" />
         </svg>
         WhyChooseUs
       </button>
-      <div className="w-full px-2 xs:px-4 md:px-8 lg:px-16">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -82,3 +82,4 @@ const WhyChooseUs = () => {
 }
 
 export default WhyChooseUs;
+

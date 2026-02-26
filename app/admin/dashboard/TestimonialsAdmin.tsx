@@ -1,11 +1,12 @@
-
+"use client";
 import { useEffect, useState } from "react";
-import GlassCard from "@/components/GlassCard";
+import { Star } from "lucide-react";
 
 export default function TestimonialsAdmin() {
   const [testimonials, setTestimonials] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [filter, setFilter] = useState<"all" | "pending" | "approved" | "rejected">("all");
 
   useEffect(() => {
     fetch("/api/testimonials/all")
@@ -46,72 +47,116 @@ export default function TestimonialsAdmin() {
     }
   };
 
+  const stats = {
+    total: testimonials.length,
+    pending: testimonials.filter((t) => !t.approved && !t.rejected).length,
+    approved: testimonials.filter((t) => t.approved).length,
+    rejected: testimonials.filter((t) => t.rejected).length,
+  };
+
+  const filtered = testimonials.filter((t) => {
+    if (filter === "pending") return !t.approved && !t.rejected;
+    if (filter === "approved") return t.approved;
+    if (filter === "rejected") return t.rejected;
+    return true;
+  });
+
   if (loading) return <div className="py-6 text-gray-400">Loading testimonials...</div>;
   if (error) return <div className="py-6 text-red-500">{error}</div>;
   if (testimonials.length === 0) return <div className="py-6 text-gray-400">No testimonials found.</div>;
 
   return (
-    <div className="py-6">
-      <h2 className="text-xl font-bold mb-4">Testimonials</h2>
-      <GlassCard className="p-0 overflow-x-auto">
-        <table className="min-w-full bg-transparent rounded-xl">
+    <div className="py-2">
+      <div className="mb-5 grid grid-cols-2 gap-3 md:grid-cols-4">
+        <div className="rounded-xl border border-slate-200 bg-white p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Total</p>
+          <p className="mt-1 text-2xl font-bold text-slate-900">{stats.total}</p>
+        </div>
+        <div className="rounded-xl border border-slate-200 bg-white p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Pending</p>
+          <p className="mt-1 text-2xl font-bold text-amber-600">{stats.pending}</p>
+        </div>
+        <div className="rounded-xl border border-slate-200 bg-white p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Approved</p>
+          <p className="mt-1 text-2xl font-bold text-green-600">{stats.approved}</p>
+        </div>
+        <div className="rounded-xl border border-slate-200 bg-white p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Rejected</p>
+          <p className="mt-1 text-2xl font-bold text-red-600">{stats.rejected}</p>
+        </div>
+      </div>
+
+      <div className="mb-4 flex flex-wrap gap-2">
+        {(["all", "pending", "approved", "rejected"] as const).map((key) => (
+          <button
+            key={key}
+            type="button"
+            onClick={() => setFilter(key)}
+            className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition ${
+              filter === key
+                ? "bg-slate-900 text-white"
+                : "border border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
+            }`}
+          >
+            {key[0].toUpperCase() + key.slice(1)}
+          </button>
+        ))}
+      </div>
+
+      <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+        <table className="min-w-full bg-transparent">
           <thead>
-            <tr className="bg-linear-to-r from-primary/10 to-secondary/10">
-              <th className="px-6 py-3 text-left font-semibold text-gray-700">Name</th>
-              <th className="px-6 py-3 text-left font-semibold text-gray-700">Role</th>
-              <th className="px-6 py-3 text-left font-semibold text-gray-700">Quote</th>
-              <th className="px-6 py-3 text-left font-semibold text-gray-700">Rating</th>
-              <th className="px-6 py-3 text-left font-semibold text-gray-700">Status</th>
-              <th className="px-6 py-3 text-left font-semibold text-gray-700">Actions</th>
+            <tr className="bg-slate-50">
+              <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-slate-600">Name</th>
+              <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-slate-600">Role</th>
+              <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-slate-600">Quote</th>
+              <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-slate-600">Rating</th>
+              <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-slate-600">Status</th>
+              <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-slate-600">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {testimonials.map((t: any, idx: number) => (
+            {filtered.map((t: any, idx: number) => (
               <tr key={t.id} className={
-                `border-b border-gray-100 ${idx % 2 === 0 ? 'bg-white/60' : 'bg-gray-50/60'} hover:bg-primary/5 transition`}
+                `border-b border-slate-100 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'} hover:bg-slate-50 transition`}
               >
-                <td className="px-6 py-3 font-semibold text-gray-900">{t.name}</td>
-                <td className="px-6 py-3 text-xs text-gray-500">{t.role}</td>
-                <td className="px-6 py-3 italic text-gray-700 max-w-xs truncate">{t.quote}</td>
-                <td className="px-6 py-3">
+                <td className="px-5 py-3 font-semibold text-slate-900">{t.name}</td>
+                <td className="px-5 py-3 text-sm text-slate-600">{t.role}</td>
+                <td className="max-w-md px-5 py-3 text-sm italic text-slate-700">{t.quote}</td>
+                <td className="px-5 py-3">
                   {t.rating ? (
                     <span className="flex items-center">
                       {[1,2,3,4,5].map((star) => (
-                        <svg
+                        <Star
                           key={star}
-                          className={`h-4 w-4 ${t.rating >= star ? 'text-yellow-400' : 'text-gray-300'}`}
-                          fill={t.rating >= star ? '#facc15' : 'none'}
-                          stroke="currentColor"
-                          strokeWidth={2}
-                          viewBox="0 0 24 24"
-                        >
-                          <polygon points="12 17.27 18.18 21 16.54 13.97 22 9.24 14.81 8.63 12 2 9.19 8.63 2 9.24 7.46 13.97 5.82 21 12 17.27" />
-                        </svg>
+                          className={`h-4 w-4 ${t.rating >= star ? "text-amber-500" : "text-slate-300"}`}
+                          fill={t.rating >= star ? "#f59e0b" : "none"}
+                        />
                       ))}
                     </span>
                   ) : '-'}
                 </td>
-                <td className="px-6 py-3">
+                <td className="px-5 py-3">
                   {t.rejected ? (
-                    <span className="text-red-500 font-semibold">Rejected</span>
+                    <span className="rounded-full bg-red-100 px-2 py-1 text-xs font-semibold text-red-700">Rejected</span>
                   ) : t.approved ? (
-                    <span className="text-green-600 font-semibold">Approved</span>
+                    <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700">Approved</span>
                   ) : (
-                    <span className="text-yellow-500 font-semibold">Pending</span>
+                    <span className="rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-700">Pending</span>
                   )}
                 </td>
-                <td className="px-6 py-3 space-x-2">
+                <td className="px-5 py-3 space-x-2">
                   {!t.approved && !t.rejected && (
                     <>
                       <button
                         onClick={() => updateStatus(t.id, "approved")}
-                        className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+                        className="rounded bg-green-600 px-3 py-1 text-sm text-white hover:bg-green-700"
                       >
                         Approve
                       </button>
                       <button
                         onClick={() => updateStatus(t.id, "rejected")}
-                        className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
+                        className="rounded bg-red-600 px-3 py-1 text-sm text-white hover:bg-red-700"
                       >
                         Reject
                       </button>
@@ -119,7 +164,7 @@ export default function TestimonialsAdmin() {
                   )}
                   <button
                     onClick={() => deleteTestimonial(t.id)}
-                    className="bg-gray-300 text-black px-3 py-1 rounded hover:bg-gray-400 ml-2"
+                    className="ml-2 rounded bg-slate-200 px-3 py-1 text-sm text-slate-900 hover:bg-slate-300"
                   >
                     Delete
                   </button>
@@ -128,7 +173,7 @@ export default function TestimonialsAdmin() {
             ))}
           </tbody>
         </table>
-      </GlassCard>
+      </div>
     </div>
   );
 }

@@ -48,13 +48,12 @@ const Services = () => {
     <motion.section
       className="py-20 bg-gray-50 w-full"
       aria-label="Services"
-      style={{width:'100vw', marginLeft:'calc(50% - 50vw)'}}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
       viewport={{ once: true }}
     >
-      <div className="w-full px-2 xs:px-4 md:px-8 lg:px-16">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.h2
           className="text-4xl md:text-5xl font-bold text-black mb-12 text-center"
           initial={{ opacity: 0, y: 20 }}
@@ -94,3 +93,4 @@ const Services = () => {
 };
 
 export default Services;
+

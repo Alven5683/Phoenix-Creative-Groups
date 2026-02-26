@@ -1,58 +1,86 @@
-"use client";
-import { useEffect, useState } from "react";
-import { motion } from 'framer-motion';
-import { useParams } from "next/navigation";
-import SafeHtmlContent from "@/components/SafeHtmlContent";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { getServiceBySlug, staticServices } from "@/lib/staticServices";
 
-export default function ServiceDetailPage() {
-  const { slug } = useParams();
-  const [service, setService] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+export function generateStaticParams() {
+  return staticServices.map((service) => ({ slug: service.slug }));
+}
 
-  useEffect(() => {
-    async function fetchService() {
-      setLoading(true);
-      try {
-        const res = await fetch(`/api/public/services/${slug}`);
-        const data = await res.json();
-        setService(data);
-      } catch {
-        setService(null);
-      } finally {
-        setLoading(false);
-      }
-    }
-    if (slug) fetchService();
-  }, [slug]);
+export const dynamicParams = false;
 
-  if (loading) return <div className="max-w-2xl mx-auto py-16 px-4">Loading...</div>;
-  if (!service) return <div className="max-w-2xl mx-auto py-16 px-4">Service not found.</div>;
+export default async function ServiceDetailPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const service = getServiceBySlug(slug);
+
+  if (!service) {
+    notFound();
+  }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 24 }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
-      className="max-w-2xl mx-auto py-16 px-4"
-    >
-      <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center text-center border border-gray-100">
-        {service.image && (
-          <img
-            src={service.image}
-            alt={service.title}
-            className="rounded-xl w-full h-48 object-cover mb-6"
-            style={{ maxWidth: '400px', minHeight: '192px', background: '#f3f4f6' }}
-          />
-        )}
-        {/* Icon placeholder for dynamic icon support */}
-        {/* {service.icon && <IconComponent className="w-12 h-12 mb-4 text-indigo-500" />} */}
-        <h1 className="text-3xl font-bold mb-4 text-black">{service.title}</h1>
-        <p className="mb-4 text-gray-700">{service.description}</p>
-        {service.content && (
-          <SafeHtmlContent html={service.content} className="prose max-w-none" />
-        )}
-      </div>
-    </motion.div>
+    <div className="mx-auto w-full max-w-6xl px-4 pb-20 pt-24 sm:px-6">
+      <section className="rounded-3xl bg-[#eceff4] p-8 md:p-12">
+        <Link href="/services" className="text-sm font-semibold text-slate-600 hover:text-slate-900">
+          Back to Services
+        </Link>
+        <h1 className="mt-4 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">{service.title}</h1>
+        <p className="mt-4 max-w-3xl text-lg leading-relaxed text-slate-600">{service.heroDescription}</p>
+        <div className="mt-6 flex flex-wrap gap-3 text-sm">
+          <span className="rounded-md bg-white px-3 py-2 font-medium text-slate-700">Timeline: {service.timeline}</span>
+          <span className="rounded-md bg-white px-3 py-2 font-medium text-slate-700">Investment: {service.investment}</span>
+        </div>
+      </section>
+
+      <section className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-4">
+        {service.process.map((step, index) => (
+          <div key={step} className="rounded-2xl bg-slate-900 p-6 text-white">
+            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-300">Step {index + 1}</p>
+            <h2 className="mt-3 text-xl font-semibold">{step}</h2>
+          </div>
+        ))}
+      </section>
+
+      <section className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2">
+        <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h3 className="text-2xl font-bold text-slate-900">Deliverables</h3>
+          <ul className="mt-4 space-y-3 text-slate-700">
+            {service.deliverables.map((item) => (
+              <li key={item} className="flex gap-2">
+                <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-slate-900" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </article>
+
+        <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h3 className="text-2xl font-bold text-slate-900">Expected Outcomes</h3>
+          <ul className="mt-4 space-y-3 text-slate-700">
+            {service.outcomes.map((item) => (
+              <li key={item} className="flex gap-2">
+                <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-slate-900" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </article>
+      </section>
+
+      <section className="mt-14 rounded-2xl bg-gradient-to-r from-slate-900 to-slate-700 p-8 text-center text-white md:p-10">
+        <h3 className="text-3xl font-bold">Need this service for your business?</h3>
+        <p className="mx-auto mt-3 max-w-2xl text-slate-200">
+          Book a discovery call and we will map scope, milestones, and delivery priorities.
+        </p>
+        <Link
+          href="/contact"
+          className="mt-6 inline-flex rounded-md bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
+        >
+          Contact Us
+        </Link>
+      </section>
+    </div>
   );
 }

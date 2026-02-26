@@ -1,90 +1,118 @@
-"use client";
+﻿"use client";
 
-import { motion } from 'framer-motion';
-import { Zap, ArrowRight } from 'lucide-react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, TorusKnot, Environment } from '@react-three/drei';
+import { motion } from "framer-motion";
+import { Zap, ArrowRight, ShieldCheck, BarChart3 } from "lucide-react";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, TorusKnot, Environment } from "@react-three/drei";
+import Link from "next/link";
 
 const Hero = () => {
   return (
-    <div className="relative min-h-screen bg-linear-to-br from-gray-50 to-white overflow-hidden">
-      {/* 3D Animated Background */}
-      <div className="absolute inset-0 w-full h-full z-0">
-        <Canvas camera={{ position: [0, 0, 8], fov: 50 }} style={{ width: '100%', height: '100%' }}>
-          <ambientLight intensity={0.7} />
-          <directionalLight position={[5, 5, 5]} intensity={0.7} />
-          <TorusKnot args={[1.7, 0.5, 128, 32]} position={[0, 0, 0]}>
-            <meshStandardMaterial color="#a259ff" metalness={0.7} roughness={0.2} />
-          </TorusKnot>
-          <Environment preset="sunset" />
-          <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={1.5} />
-        </Canvas>
-      </div>
+    <section className="relative min-h-[92vh] overflow-hidden bg-gradient-to-br from-[#f8fbff] via-white to-[#edf4ff]">
+      <div className="absolute -left-20 -top-28 h-80 w-80 rounded-full bg-cyan-200/30 blur-3xl" />
+      <div className="absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-indigo-200/30 blur-3xl" />
 
-      <div className="relative z-10 flex items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-4xl mx-auto">
-          {/* Logo */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="flex items-center justify-center space-x-3 mb-8"
-          >
-            <Zap className="h-16 w-16 text-black" />
-            <span className="text-4xl font-bold text-black">Phoenix Creative Group</span>
-          </motion.div>
-
-          {/* Updated Tagline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="text-5xl md:text-7xl font-bold text-black mb-8 leading-tight"
-          >
-            Your Digital Partner for{' '}
-            <span className="bg-linear-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-              Software & Marketing
-            </span>
-          </motion.h1>
-
-          {/* Updated Subtext */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto"
-          >
-            We help businesses grow through cutting-edge software development and result-driven marketing strategies — all under one roof.
-          </motion.p>
-
-          {/* CTA Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-            className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6"
-          >
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-black text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-800 transition-colors flex items-center space-x-2"
-              onClick={() => window.location.href = '/website-cost-calculator'}
+      <div className="relative z-10 mx-auto max-w-7xl px-4 pb-16 pt-28 sm:px-6 lg:px-8">
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
+          <div>
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="mb-6 inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/80 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-gray-600"
             >
-              <span>Start Your Project</span>
-              <ArrowRight className="h-5 w-5" />
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="border-2 border-black text-black px-8 py-4 rounded-full font-semibold text-lg hover:bg-black hover:text-white transition-colors"
-              onClick={() => window.location.href = '/portfolio'}
+              <Zap className="h-4 w-4 text-indigo-600" />
+              Next-Gen Brand Experience
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-4xl font-extrabold leading-tight text-gray-900 sm:text-5xl lg:text-6xl"
             >
-              View Portfolio
-            </motion.button>
+              We Build Digital Brands That Scale
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="mt-6 max-w-xl text-lg text-gray-600"
+            >
+              Strategic design, responsive development, and growth-driven execution for teams that want a premium digital presence and better conversion outcomes.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="mt-8 flex flex-col gap-4 sm:flex-row"
+            >
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-gray-900 px-7 py-3 font-semibold text-white transition hover:bg-gray-800"
+              >
+                Schedule Discovery Call
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/portfolio"
+                className="inline-flex items-center justify-center rounded-xl border border-gray-300 bg-white px-7 py-3 font-semibold text-gray-700 transition hover:bg-gray-50"
+              >
+                View Case Studies
+              </Link>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="mt-8 grid grid-cols-2 gap-4"
+            >
+              <div className="rounded-2xl border border-gray-200 bg-white/80 p-4">
+                <p className="text-2xl font-bold text-gray-900">120+</p>
+                <p className="text-sm text-gray-600">Projects Delivered</p>
+              </div>
+              <div className="rounded-2xl border border-gray-200 bg-white/80 p-4">
+                <p className="text-2xl font-bold text-gray-900">97%</p>
+                <p className="text-sm text-gray-600">Client Satisfaction</p>
+              </div>
+            </motion.div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="relative"
+          >
+            <div className="overflow-hidden rounded-3xl border border-gray-200 bg-white/70 p-4 shadow-xl backdrop-blur-xl">
+              <div className="h-[360px] w-full rounded-2xl bg-gradient-to-br from-[#eef4ff] to-[#e7fbff]">
+                <Canvas camera={{ position: [0, 0, 7], fov: 52 }} style={{ width: "100%", height: "100%" }}>
+                  <ambientLight intensity={0.8} />
+                  <directionalLight position={[4, 4, 4]} intensity={0.8} />
+                  <TorusKnot args={[1.6, 0.45, 160, 28]}>
+                    <meshStandardMaterial color="#4f46e5" metalness={0.65} roughness={0.2} />
+                  </TorusKnot>
+                  <Environment preset="city" />
+                  <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={1.2} />
+                </Canvas>
+              </div>
+            </div>
+
+            <div className="absolute -bottom-5 -left-4 flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-lg">
+              <ShieldCheck className="h-4 w-4 text-emerald-600" />
+              <span className="text-sm font-semibold text-gray-700">Enterprise-ready quality</span>
+            </div>
+            <div className="absolute -right-4 top-8 flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-lg">
+              <BarChart3 className="h-4 w-4 text-indigo-600" />
+              <span className="text-sm font-semibold text-gray-700">Growth-focused execution</span>
+            </div>
           </motion.div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

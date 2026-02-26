@@ -7,7 +7,6 @@ const adminLinks = [
 	{ href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
 	{ href: "/admin/dashboard/requests", label: "Contact Requests", icon: FileText },
 	{ href: "/admin/requests/contact", label: "Contact Us Requests", icon: FileText },
-	{ href: "/admin/services", label: "Services", icon: Layers },
 	{ href: "/admin/portfolio", label: "Portfolio", icon: Image },
 	{ href: "/admin/portfolio-upload", label: "Add Portfolio", icon: Image },
 	{ href: "/admin/blog", label: "Blog", icon: BookOpen },

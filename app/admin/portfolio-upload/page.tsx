@@ -42,22 +42,35 @@ export default function PortfolioUploadPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-slate-100">
       <AdminSidebar />
       <div className="flex-1 flex flex-col min-h-screen">
         <AdminTopbar />
-        <main className="flex-1 flex flex-col items-center justify-center px-2 md:px-8">
-           <div className="w-full max-w-5xl mx-auto glass-card p-10 flex flex-col items-center justify-center" style={{minWidth:0}}>
-            <h1 className="text-4xl font-extrabold mb-8 text-center bg-clip-text text-transparent bg-linear-to-r from-primary to-secondary drop-shadow-lg">
+        <main className="flex-1 px-3 py-6 md:px-8">
+          <div className="mx-auto w-full max-w-6xl rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-8">
+            <h1 className="mb-2 text-3xl font-bold text-slate-900 md:text-4xl">
               {id ? "Edit Portfolio Project" : "Upload Portfolio Project"}
             </h1>
+            <p className="mb-8 text-sm text-slate-600">
+              Fill out the fields below to publish a clean, conversion-focused case study page.
+            </p>
             {loading ? (
-              <div className="text-center text-gray-400 text-lg font-medium">Loading...</div>
+              <div className="rounded-xl border border-slate-200 bg-slate-50 p-6 text-center text-slate-500">
+                Loading project data...
+              </div>
             ) : (
               <PortfolioForm onSave={handleSave} initial={initial} onClose={() => window.history.back()} />
             )}
-            {success && <div className="mt-6 text-green-600 text-center font-semibold text-lg rounded-xl bg-green-50/80 px-4 py-2 shadow">Portfolio {id ? "updated" : "uploaded"} successfully!</div>}
-            {error && <div className="mt-6 text-red-600 text-center font-semibold text-lg rounded-xl bg-red-50/80 px-4 py-2 shadow">{error}</div>}
+            {success && (
+              <div className="mt-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-semibold text-green-700">
+                Portfolio {id ? "updated" : "uploaded"} successfully.
+              </div>
+            )}
+            {error && (
+              <div className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
+                {error}
+              </div>
+            )}
           </div>
         </main>
       </div>

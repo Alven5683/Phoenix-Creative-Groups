@@ -33,8 +33,8 @@ const achievements: Achievement[] = [
 
 const Achievements = () => {
   return (
-    <section id="achievements" className="py-20 bg-white w-full" aria-label="Achievements" style={{width:'100vw', marginLeft:'calc(50% - 50vw)'}}>
-      <div className="w-full px-2 xs:px-4 md:px-8 lg:px-16">
+    <section id="achievements" className="py-20 bg-white w-full" aria-label="Achievements">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -81,3 +81,4 @@ const Achievements = () => {
 };
 
 export default Achievements;
+

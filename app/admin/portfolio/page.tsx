@@ -1,7 +1,6 @@
 "use client";
 import AdminSidebar from '../../../components/AdminSidebar';
 import AdminTopbar from '../../../components/AdminTopbar';
-import GlassCard from '../../../components/GlassCard';
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -58,13 +57,13 @@ const AdminPortfolio = () => {
 
 
 	return (
-		<div className="min-h-screen flex bg-gray-50">
+		<div className="min-h-screen flex bg-slate-100">
 			<AdminSidebar />
 			<div className="flex-1 flex flex-col h-screen">
 				<AdminTopbar />
-				<div className="flex-1 overflow-y-auto p-8">
+				<div className="flex-1 overflow-y-auto p-6 md:p-8">
 					<div className="flex items-center justify-between mb-8">
-						<h1 className="text-4xl font-bold text-gray-900">Portfolio</h1>
+						<h1 className="text-3xl font-bold text-slate-900 md:text-4xl">Portfolio</h1>
 						<button
 							className="px-6 py-3 rounded-xl bg-linear-to-r from-primary to-secondary text-white font-semibold shadow hover:from-secondary hover:to-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
 							onClick={() => router.push("/admin/portfolio-upload")}
@@ -73,12 +72,12 @@ const AdminPortfolio = () => {
 						</button>
 					</div>
 					{loading ? (
-						<div className="text-gray-400">Loading...</div>
+						<div className="rounded-xl border border-slate-200 bg-white p-6 text-slate-500">Loading projects...</div>
 					) : (
 						<div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 							{projects.map((p) => (
-								<div key={p._id} className="bg-white rounded-2xl shadow-lg p-6 flex flex-col gap-3 border border-gray-100 hover:shadow-xl transition-all">
-									<h3 className="text-xl font-bold text-gray-900 mb-1">{p.title}</h3>
+								<div key={p._id} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:shadow-md">
+									<h3 className="mb-1 text-xl font-bold text-slate-900">{p.title}</h3>
 									{p.featured && <span className="inline-block px-3 py-1 text-xs bg-linear-to-r from-primary to-secondary text-white rounded-full mb-2 font-semibold shadow">Featured</span>}
 									<div className="flex gap-3 mt-2">
 										<button
