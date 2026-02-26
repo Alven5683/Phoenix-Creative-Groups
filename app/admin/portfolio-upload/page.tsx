@@ -1,11 +1,11 @@
 "use client";
-import { useState, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import AdminSidebar from "components/AdminSidebar";
 import AdminTopbar from "components/AdminTopbar";
 import PortfolioForm from "../../../components/PortfolioForm";
 
-export default function PortfolioUploadPage() {
+function PortfolioUploadContent() {
 
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
@@ -75,5 +75,19 @@ export default function PortfolioUploadPage() {
         </main>
       </div>
     </div>
+  );
+}
+
+export default function PortfolioUploadPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-slate-100 text-slate-600">
+          Loading portfolio editor...
+        </div>
+      }
+    >
+      <PortfolioUploadContent />
+    </Suspense>
   );
 }
