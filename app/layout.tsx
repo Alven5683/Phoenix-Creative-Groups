@@ -2,8 +2,7 @@
 import type { Metadata } from "next";
 import { Orbitron, Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import AppShell from "@/components/AppShell";
 
 const orbitron = Orbitron({
   variable: "--font-display",
@@ -33,13 +32,7 @@ export default function RootLayout({
         className={`min-h-screen min-w-full w-full antialiased bg-background bg-hero-gradient text-white ${orbitron.variable} ${inter.variable} font-sans`}
         style={{ WebkitFontSmoothing: "antialiased" }}
       >
-        <Navbar />
-        <main className="min-h-[80vh] flex flex-col w-full">
-          <div className="mx-auto w-full max-w-[1400px] flex-1 flex flex-col px-4 sm:px-6 lg:px-8">
-            {children}
-          </div>
-        </main>
-        <Footer />
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );

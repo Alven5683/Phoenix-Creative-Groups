@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import BlogPostForm from "@/components/BlogPostForm";
 import AdminSidebar from "@/components/AdminSidebar";
+import AdminTopbar from "@/components/AdminTopbar";
 import { useRouter, useParams } from "next/navigation";
 
 import type { BlogPost } from "@/components/BlogPostForm";
@@ -52,14 +53,16 @@ export default function EditBlogPostPage() {
   if (!post) return <div className="p-8 text-red-500">Post not found.</div>;
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
+    <div className="min-h-screen flex bg-slate-100">
       <AdminSidebar />
       <main className="flex-1 flex flex-col">
-        <header className="w-full px-8 py-6 border-b border-gray-200 flex items-center justify-between bg-white">
-          <h1 className="text-3xl font-bold">Edit Blog Post</h1>
-        </header>
-        <section className="flex-1 p-8">
-          <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-md min-h-100 w-full">
+        <AdminTopbar />
+        <section className="flex-1 p-4 md:p-8">
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold text-slate-900">Edit Blog Post</h1>
+            <p className="mt-1 text-sm text-slate-600">Update content, metadata, and author details.</p>
+          </div>
+          <div className="min-h-100 w-full rounded-xl border border-slate-200 bg-white p-5 shadow-sm md:p-8">
             <BlogPostForm
               initial={post}
               categories={categories}

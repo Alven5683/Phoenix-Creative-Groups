@@ -1,139 +1,145 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import AdminSidebar from "@/components/AdminSidebar";
 import Link from "next/link";
-import { FaFileAlt, FaFileSignature, FaFolderOpen, FaUsers, FaBriefcase } from "react-icons/fa";
-
+import { FaBriefcase, FaFileAlt, FaFileSignature, FaFolderOpen, FaUsers } from "react-icons/fa";
+import { PencilLine, PlusCircle, Tags, UserPlus } from "lucide-react";
+import AdminSidebar from "@/components/AdminSidebar";
+import AdminTopbar from "@/components/AdminTopbar";
 import DeviceTypeChart from "@/components/DeviceTypeChart";
-import TestimonialsAdmin from "./TestimonialsAdmin";
 
-
+type Stats = {
+  services: number;
+  publishedPosts: number;
+  categories: number;
+  authors: number;
+  portfolio: number;
+};
 
 export default function AdminDashboardPage() {
-	const [stats, setStats] = useState({
-		services: 0,
-		publishedPosts: 0,
-		categories: 0,
-		authors: 0,
-		portfolio: 0,
-	});
-	const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<Stats>({
+    services: 0,
+    publishedPosts: 0,
+    categories: 0,
+    authors: 0,
+    portfolio: 0,
+  });
+  const [loading, setLoading] = useState(true);
 
-	useEffect(() => {
-		fetchStats();
-	}, []);
+  useEffect(() => {
+    fetchStats();
+  }, []);
 
-	async function fetchStats() {
-		setLoading(true);
-		try {
-			const [servicesRes, postsRes, categoriesRes, authorsRes, portfolioRes] = await Promise.all([
-				fetch("/api/admin/services"),
-				fetch("/api/admin/blog"),
-				fetch("/api/admin/categories"),
-				fetch("/api/admin/authors"),
-				fetch("/api/admin/portfolio"),
-			]);
-			const services = await servicesRes.json();
-			const posts = await postsRes.json();
-			const categories = await categoriesRes.json();
-			const authors = await authorsRes.json();
-			const portfolio = await portfolioRes.json();
-			setStats({
-				services: services.length,
-				publishedPosts: posts.filter((p: any) => (p.status ?? "published") === "published").length,
-				categories: categories.length,
-				authors: authors.length,
-				portfolio: portfolio.length,
-			});
-		} catch {
-			setStats({ services: 0, publishedPosts: 0, categories: 0, authors: 0, portfolio: 0 });
-		} finally {
-			setLoading(false);
-		}
-	}
+  async function fetchStats() {
+    setLoading(true);
+    try {
+      const [servicesRes, postsRes, categoriesRes, authorsRes, portfolioRes] = await Promise.all([
+        fetch("/api/admin/services"),
+        fetch("/api/admin/blog"),
+        fetch("/api/admin/categories"),
+        fetch("/api/admin/authors"),
+        fetch("/api/admin/portfolio"),
+      ]);
 
-	return (
-		<div className="min-h-screen flex flex-col md:flex-row bg-gray-50">
-			<AdminSidebar />
-			<div className="flex-1 flex flex-col h-full mt-4 md:mt-10">
-						<div className="flex-1 overflow-y-auto px-2 sm:px-4 md:px-8 py-4 md:py-8">
-					<div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 md:mb-8 gap-3 md:gap-4">
-						<div>
-							<h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-1">Dashboard</h1>
-							<div className="text-gray-500 text-base md:text-lg">Welcome back, Alven Smith!</div>
-						</div>
-						<button className="px-4 md:px-5 py-2 rounded-xl bg-linear-to-r from-primary to-secondary text-white font-semibold shadow hover:from-secondary hover:to-primary transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400">Settings</button>
-					</div>
-					{loading ? (
-						<div className="mb-8 flex items-center justify-center min-h-30">
-							<span className="text-gray-400 animate-pulse">Loading stats...</span>
-						</div>
-					) : (
-						<>
-							<div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-4 md:gap-6 mb-6 md:mb-8">
-								<StatCard label="Services" value={stats.services} icon={<FaFileAlt className="w-7 h-7 md:w-8 md:h-8" />} accent="from-blue-400 to-blue-600" />
-								<StatCard label="Published Posts" value={stats.publishedPosts} icon={<FaFileSignature className="w-7 h-7 md:w-8 md:h-8" />} accent="from-purple-400 to-purple-600" />
-								<StatCard label="Categories" value={stats.categories} icon={<FaFolderOpen className="w-7 h-7 md:w-8 md:h-8" />} accent="from-green-400 to-green-600" />
-								<StatCard label="Authors" value={stats.authors} icon={<FaUsers className="w-7 h-7 md:w-8 md:h-8" />} accent="from-pink-400 to-pink-600" />
-								<StatCard label="Portfolio" value={stats.portfolio} icon={<FaBriefcase className="w-7 h-7 md:w-8 md:h-8" />} accent="from-orange-400 to-orange-600" />
-							</div>
-							<div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
-								<DeviceTypeChart />
-								<div className="bg-white rounded-2xl shadow-lg p-4 md:p-6 flex flex-col justify-between">
-									<h3 className="text-base md:text-lg font-semibold mb-2 text-gray-900">Active Users</h3>
-									<div className="flex items-center gap-3 md:gap-4">
-										<span className="text-3xl md:text-4xl font-bold text-primary">42.5K</span>
-										<span className="text-lg text-gray-500">78%</span>
-									</div>
-									<div className="text-gray-400 mt-2">24K users increased from last month</div>
-								</div>
-								<div className="bg-white rounded-2xl shadow-lg p-4 md:p-6 flex flex-col justify-between">
-									<h3 className="text-base md:text-lg font-semibold mb-2 text-gray-900">Total Users</h3>
-									<div className="flex items-center gap-3 md:gap-4">
-										<span className="text-3xl md:text-4xl font-bold text-secondary">97.4K</span>
-										<span className="text-green-500 text-lg">+12.5%</span>
-									</div>
-									<div className="text-gray-400 mt-2">from last month</div>
-								</div>
-							</div>
-							<div className="bg-white rounded-2xl shadow-lg p-4 md:p-6 mb-6 md:mb-8">
-								<h2 className="text-base md:text-lg font-semibold mb-3 md:mb-4 text-gray-800">Quick Actions</h2>
-								<div className="flex flex-wrap gap-4 md:gap-6">
-									<Link href="/admin/blog" className="flex items-center gap-2 text-blue-600 font-medium hover:underline">
-										<span>📄</span> <span className="hidden xs:inline">Create Post</span>
-									</Link>
-									<Link href="/admin/blog" className="flex items-center gap-2 text-gray-700 font-medium hover:underline">
-										<span>📄</span> <span className="hidden xs:inline">Manage Posts</span>
-									</Link>
-									<Link href="/admin/blog" className="flex items-center gap-2 text-purple-600 font-medium hover:underline">
-										<span>📁</span> <span className="hidden xs:inline">Manage Categories</span>
-									</Link>
-									<Link href="/admin/blog" className="flex items-center gap-2 text-pink-600 font-medium hover:underline">
-										<span>🏷️</span> <span className="hidden xs:inline">Manage Tags</span>
-									</Link>
-									<a href="https://news.yoursite.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-orange-600 font-medium hover:underline">
-										<span>📰</span> <span className="hidden xs:inline">External News</span>
-									</a>
-								</div>
-							</div>
-						</>
-					)}
-				</div>
+      const services = await servicesRes.json();
+      const posts = await postsRes.json();
+      const categories = await categoriesRes.json();
+      const authors = await authorsRes.json();
+      const portfolio = await portfolioRes.json();
 
-			{/* ...existing dashboard content... */}
-			{/* <TestimonialsAdmin /> */}
-		</div>
-	</div>
+      setStats({
+        services: Array.isArray(services) ? services.length : 0,
+        publishedPosts: Array.isArray(posts) ? posts.filter((p: any) => (p.status ?? "published") === "published").length : 0,
+        categories: Array.isArray(categories) ? categories.length : 0,
+        authors: Array.isArray(authors) ? authors.length : 0,
+        portfolio: Array.isArray(portfolio) ? portfolio.length : 0,
+      });
+    } catch {
+      setStats({ services: 0, publishedPosts: 0, categories: 0, authors: 0, portfolio: 0 });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-100 md:flex">
+      <AdminSidebar />
+      <div className="flex-1">
+        <AdminTopbar />
+        <main className="p-4 md:p-8">
+          <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h1 className="text-3xl font-bold text-slate-900 md:text-4xl">Dashboard</h1>
+              <p className="mt-1 text-slate-600">Track content, portfolio, and team activity from one place.</p>
+            </div>
+            <Link href="/admin/settings" className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700">
+              Open Settings
+            </Link>
+          </div>
+
+          {loading ? (
+            <div className="rounded-xl border border-slate-200 bg-white p-6 text-slate-500">Loading dashboard stats...</div>
+          ) : (
+            <>
+              <section className="grid grid-cols-2 gap-4 lg:grid-cols-5">
+                <StatCard label="Services" value={stats.services} icon={<FaFileAlt className="h-5 w-5" />} />
+                <StatCard label="Published Posts" value={stats.publishedPosts} icon={<FaFileSignature className="h-5 w-5" />} />
+                <StatCard label="Categories" value={stats.categories} icon={<FaFolderOpen className="h-5 w-5" />} />
+                <StatCard label="Authors" value={stats.authors} icon={<FaUsers className="h-5 w-5" />} />
+                <StatCard label="Portfolio" value={stats.portfolio} icon={<FaBriefcase className="h-5 w-5" />} />
+              </section>
+
+              <section className="mt-6 grid grid-cols-1 gap-4 xl:grid-cols-3">
+                <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+                  <DeviceTypeChart />
+                </div>
+                <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+                  <h3 className="text-sm font-semibold uppercase tracking-[0.12em] text-slate-500">Active Users</h3>
+                  <p className="mt-3 text-4xl font-bold text-slate-900">42.5K</p>
+                  <p className="mt-2 text-sm text-slate-600">24K users increased from last month.</p>
+                </div>
+                <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+                  <h3 className="text-sm font-semibold uppercase tracking-[0.12em] text-slate-500">Total Users</h3>
+                  <p className="mt-3 text-4xl font-bold text-slate-900">97.4K</p>
+                  <p className="mt-2 text-sm text-green-600">+12.5% from last month.</p>
+                </div>
+              </section>
+
+              <section className="mt-6 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+                <h2 className="text-lg font-semibold text-slate-900">Quick Actions</h2>
+                <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                  <QuickLink href="/admin/blog/create" icon={<PlusCircle size={16} />} label="Create Post" />
+                  <QuickLink href="/admin/blog" icon={<PencilLine size={16} />} label="Manage Posts" />
+                  <QuickLink href="/admin/categories" icon={<Tags size={16} />} label="Manage Categories" />
+                  <QuickLink href="/admin/authors" icon={<UserPlus size={16} />} label="Manage Authors" />
+                </div>
+              </section>
+            </>
+          )}
+        </main>
+      </div>
+    </div>
   );
 }
 
-function StatCard({ label, value, icon, accent }: { label: string; value: number; icon: React.ReactNode; accent: string }) {
-	return (
-		<div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col items-center text-center p-6 border border-gray-100">
-			<div className={`mb-3 bg-linear-to-r ${accent} p-3 rounded-full text-white flex items-center justify-center`}>{icon}</div>
-			<div className="text-3xl font-extrabold text-gray-900">{value}</div>
-			<div className="text-gray-500 mt-1 font-medium">{label}</div>
-		</div>
-	);
+function StatCard({ label, value, icon }: { label: string; value: number; icon: React.ReactNode }) {
+  return (
+    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="mb-2 inline-flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-700">{icon}</div>
+      <p className="text-2xl font-bold text-slate-900">{value}</p>
+      <p className="mt-1 text-sm text-slate-600">{label}</p>
+    </div>
+  );
+}
+
+function QuickLink({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) {
+  return (
+    <Link
+      href={href}
+      className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+    >
+      {icon}
+      <span>{label}</span>
+    </Link>
+  );
 }
